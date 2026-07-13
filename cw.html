@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -301,7 +301,6 @@
             text-decoration: none;
             transition: var(--transition);
             box-shadow: 0 3px 8px rgba(217, 77, 114, 0.15);
-            margin-left: 4px;
         }
 
         .f1-link-btn:hover {
@@ -310,7 +309,46 @@
             color: #ffffff;
         }
 
-        /* === 2. 레벨 및 스택 섹션 (원형 차트 고정 + 스크롤 쭈욱 애니메이션 + 툴팁) === */
+        /* [추가] F1 버튼 전용 말풍선 컨테이너 및 팝업 스타일 */
+        .f1-container {
+            position: relative;
+            display: inline-block;
+            margin-left: 4px;
+        }
+
+        .f1-badge-popup {
+            position: absolute;
+            bottom: 130%; 
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent); 
+            color: #2d2d2d;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 4px;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            animation: bounceMini 0.8s infinite alternate; 
+        }
+
+        .f1-badge-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 4px;
+            border-style: solid;
+            border-color: var(--accent) transparent transparent transparent;
+        }
+
+        @keyframes bounceMini {
+            0% { transform: translateX(-50%) translateY(0); }
+            100% { transform: translateX(-50%) translateY(-3px); }
+        }
+
+        /* === 2. 레벨 및 스택 섹션 === */
         .stack-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -334,7 +372,6 @@
             font-weight: 700;
         }
 
-        /* [개선] 툴팁 가이드용 래퍼 */
         .github-readme-row {
             display: flex;
             align-items: center;
@@ -355,7 +392,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
 
-        /* [수정 1] 원형 도넛 차트 (고정 스타일) */
+        /* 원형 도넛 차트 (고정 스타일) */
         .readme-pie {
             width: 32px;
             height: 32px;
@@ -380,7 +417,7 @@
         .readme-pie .fill-circle {
             stroke: var(--primary);
             stroke-dasharray: 100;
-            stroke-dashoffset: var(--donut-offset); /* 고정 값 할당 */
+            stroke-dashoffset: var(--donut-offset); 
         }
 
         .readme-body {
@@ -410,11 +447,10 @@
             overflow: hidden;
         }
 
-        /* [수정 1] 스크롤 시 쭈욱 채워지는 실시간 바 애니메이션 기본 세팅 */
         .readme-bar-fill {
             height: 100%;
             background: var(--primary);
-            width: 0%; /* 기본값 0%에서 JS로 타겟 너비까지 실시간 확장 */
+            width: 0%; 
             transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
@@ -426,7 +462,7 @@
             text-align: right;
         }
 
-        /* [수정 2] 한 줄 설명 팝업 툴팁 디자인 */
+        /* 한 줄 설명 팝업 툴팁 디자인 */
         .stack-tooltip {
             position: absolute;
             bottom: 115%;
@@ -837,7 +873,7 @@
                 <li><a href="#contact" class="nav-link">Contact</a></li>
                 <li>
                     <button class="theme-toggle-btn" id="themeToggle" aria-label="테마 전환">
-                        <i class="fa-solid fa-moon"></i>
+                        <i class="fa-solid fa-sun"></i>
                     </button>
                 </li>
             </ul>
@@ -896,7 +932,10 @@
                                 <div class="info-label">취미</div>
                                 <div class="info-value">
                                     음악 감상, 
-                                    <a href="https://ai-onboarding-f1.netlify.app/f1.html" target="_blank" class="f1-link-btn">🏁 F1 관람</a>
+                                    <div class="f1-container">
+                                        <span class="f1-badge-popup">Click!</span>
+                                        <a href="https://ai-onboarding-f1.netlify.app/f1.html" target="_blank" class="f1-link-btn">🏁 F1 관람</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -919,7 +958,7 @@
                 <div class="stack-card">
                     <h3><i class="fa-solid fa-server" style="color:var(--primary)"></i> Backend Stack</h3>
                     
-                    <!-- Java: 70% (Donut Offset = 100 - 70 = 30) -->
+                    <!-- Java: 70% -->
                     <div class="github-readme-row">
                         <div class="stack-tooltip">Java 기반의 객체 지향 설계를 바탕으로 대규모 Spring 프로젝트 개발 경험 보유</div>
                         <div class="readme-pie">
@@ -937,7 +976,7 @@
                         </div>
                     </div>
 
-                    <!-- Spring: 60% (Donut Offset = 100 - 60 = 40) -->
+                    <!-- Spring: 60% -->
                     <div class="github-readme-row">
                         <div class="stack-tooltip">전반적인 Spring 생태계 및 MVC 아키텍처, 빈 생명주기에 대한 깊은 이해</div>
                         <div class="readme-pie">
@@ -955,7 +994,7 @@
                         </div>
                     </div>
 
-                    <!-- MySQL: 60% (Donut Offset = 100 - 60 = 40) -->
+                    <!-- MySQL: 60% -->
                     <div class="github-readme-row">
                         <div class="stack-tooltip">관계형 데이터베이스(RDB) 설계 및 프로젝트 내 데이터 정규화·쿼리 최적화 경험 수행</div>
                         <div class="readme-pie">
@@ -973,7 +1012,7 @@
                         </div>
                     </div>
 
-                    <!-- Python: 80% (Donut Offset = 100 - 80 = 20) -->
+                    <!-- Python: 80% -->
                     <div class="github-readme-row">
                         <div class="stack-tooltip">코딩 테스트 및 알고리즘 풀이 주력 언어이자 2회의 데이터 분석 프로젝트 완수</div>
                         <div class="readme-pie">
@@ -1181,17 +1220,15 @@
             progressBar.style.width = scrolled + '%';
         });
 
-        // --- 3. [수정 1] 스크롤 시 들어올 때마다 게이지 채워지는 Intersection Observer 로직 ---
+        // --- 3. 스크롤 시 들어올 때마다 게이지 채워지는 Intersection Observer 로직 ---
         const fillBars = document.querySelectorAll('.readme-bar-fill');
         
         const barObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // 화면에 보이면 타겟 퍼센트로 게이지 쭈욱 채움
                     const targetWidth = entry.target.getAttribute('data-target');
                     entry.target.style.width = targetWidth;
                 } else {
-                    // 화면에서 벗어나면 다시 0%로 초기화 (다시 들어올 때 재생되도록 처리)
                     entry.target.style.width = '0%';
                 }
             });
