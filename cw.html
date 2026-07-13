@@ -261,7 +261,6 @@
             gap: 1.2rem;
         }
 
-        /* [요청반영 1] 사진 크기 기존 60px에서 3배(180px)로 확대 */
         .home-profile-circle {
             width: 180px;
             height: 180px;
@@ -281,7 +280,6 @@
             object-fit: cover;
         }
 
-        /* [요청반영 2] 영어 글씨체 JetBrains Mono 폰트 및 사진처럼 넓은 간격 지정 */
         .home-subtitle {
             font-family: 'JetBrains Mono', monospace;
             font-size: 1.05rem;
@@ -579,6 +577,56 @@
         .github-readme-row:hover .stack-tooltip {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
+        }
+
+        /* 신규 자격증 레이아웃 스타일 */
+        .cert-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 2rem 0 0.8rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-top: 1px dashed var(--border);
+            padding-top: 1.5rem;
+        }
+
+        .cert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .cert-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.1rem;
+            border-radius: 12px;
+        }
+
+        .cert-item i {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+
+        .cert-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .cert-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-left: auto;
         }
 
         .algo-level-container {
@@ -1184,27 +1232,11 @@
 
                 </div>
                 
-                <!-- Tools & Others -->
+                <!-- Tools & Others (요청사항 반영: Git 제거, 피그마/노션 유지 + 자격증 추가) -->
                 <div class="stack-card">
                     <h3><i class="fa-solid fa-screwdriver-wrench" style="color:var(--accent)"></i> Tools & Others</h3>
                     
-                    <div class="github-readme-row">
-                        <div class="stack-tooltip">Git 브랜치 전략 기반 협업 및 형상 관리 프로세스 능숙한 활용 가능</div>
-                        <div class="readme-pie">
-                            <svg viewBox="0 0 36 36">
-                                <circle class="bg-circle" cx="18" cy="18" r="16"/>
-                                <circle class="fill-circle" cx="18" cy="18" r="16" style="--donut-offset: 20;"/>
-                            </svg>
-                        </div>
-                        <div class="readme-body">
-                            <div class="readme-name">Git / GitHub</div>
-                            <div class="readme-bar-wrapper">
-                                <div class="readme-bar-bg"><div class="readme-bar-fill" data-target="80%"></div></div>
-                                <div class="readme-percent-text">80%</div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <!-- Figma -->
                     <div class="github-readme-row">
                         <div class="stack-tooltip">UI/UX 와이어프레임 설계 및 컴포넌트 단위 협업 프로토타이핑 가능</div>
                         <div class="readme-pie">
@@ -1222,6 +1254,7 @@
                         </div>
                     </div>
 
+                    <!-- Notion -->
                     <div class="github-readme-row">
                         <div class="stack-tooltip">일정 관리, 기술 아카이빙, 프로젝트 스프린트 일정 체계적 문서화 분담</div>
                         <div class="readme-pie">
@@ -1236,6 +1269,26 @@
                                 <div class="readme-bar-bg"><div class="readme-bar-fill" data-target="90%"></div></div>
                                 <div class="readme-percent-text">90%</div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- 자격증 및 인증 목록 영역 -->
+                    <div class="cert-title">Certificates & Language</div>
+                    <div class="cert-list">
+                        <div class="cert-item">
+                            <i class="fa-solid fa-award"></i>
+                            <span class="cert-text">정보처리기사</span>
+                            <span class="cert-badge">취득</span>
+                        </div>
+                        <div class="cert-item">
+                            <i class="fa-solid fa-database"></i>
+                            <span class="cert-text">SQLD (SQL 개발자)</span>
+                            <span class="cert-badge">취득</span>
+                        </div>
+                        <div class="cert-item">
+                            <i class="fa-solid fa-language"></i>
+                            <span class="cert-text">OPIc</span>
+                            <span class="cert-badge">IH 취득</span>
                         </div>
                     </div>
 
