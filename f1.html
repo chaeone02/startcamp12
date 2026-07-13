@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I AM : FORMULA 1 ARCHIVE</title>
+    <!-- 스포츠/레이싱 감성을 위한 구글 폰트 추가 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. 디자인 시스템 & 기본 초기화 */
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #06090f;      
+            --card-bg: #0d121f;       
+            --text-main: #ffffff;
+            --text-sub: #8fa0ba;       
+            --f1-red: #FF1801;         
+            --ferrari-gold: #FFD200;   
+            --medium-tire: #FFD200; /* 미디움 타이어 노란색 */
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-racing: 'Oswald', sans-serif;
+            --font-mono: 'Share Tech Mono', monospace;
+            --font-main: 'Pretendard', -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+            /* 기본 커서 숨김 (커스텀 커서 사용) */
+            cursor: none; 
+        }
+
+        a, button, .core-card, .gallery-card, .nav-link {
+            cursor: none !important; /* 커스텀 커서 유지 */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- 커스텀 마우스 커서 (미디움 타이어) --- */
+        .custom-cursor {
+            width: 32px;
+            height: 32px;
+            border: 4px dashed var(--medium-tire);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s, height 0.2s, border-color 0.2s;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px rgba(255, 210, 0, 0.5);
+        }
+        .custom-cursor::after {
+            content: 'M';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--medium-tire);
+            font-family: var(--font-racing);
+            font-size: 10px;
+            font-weight: bold;
+        }
+        /* 호버 시 타이어 회전 및 이펙트 */
+        .custom-cursor.hover {
+            width: 40px;
+            height: 40px;
+            border: 5px dashed var(--f1-red);
+            animation: tireRotate 1s linear infinite;
+            box-shadow: 0 0 15px rgba(255, 24, 1, 0.8);
+        }
+        .custom-cursor.hover::after {
+            content: 'RACE';
+            color: var(--f1-red);
+            font-size: 8px;
+        }
+        @keyframes tireRotate {
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* --- 은은한 파티클 애니메이션 스페이스 --- */
+        #particle-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* --- 스크롤 진행률 상단 바 --- */
+        .scroll-progress-container {
+            position: fixed;
+            top: 55px; /* 내비바 바로 아래 */
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 101;
+        }
+        .scroll-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--f1-red), #ff6a00);
+            box-shadow: 0 0 8px var(--f1-red);
+        }
+
+        /* 2. 상단 슬림 고정 내비게이션 바 (F1 테마) */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background-color: rgba(6, 9, 15, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #1a2436;
+            z-index: 100;
+        }
+        /* F1 레이싱 스트라이프 데코 */
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--f1-red) 70%, #ffffff 70%, #ffffff 85%, var(--bg-color) 85%);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 55px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-logo {
+            font-family: var(--font-racing);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-logo span {
+            color: var(--f1-red);
+        }
+
+        .nav-menu-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 4px;
+        }
+
+        .nav-link {
+            font-family: var(--font-racing);
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            padding: 6px 14px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+            background-color: var(--f1-red);
+            transform: skewX(-10deg); /* 레이싱 속도감 효과 */
+        }
+
+        /* LIVE 시그널 */
+        .live-signal {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: #00ff66;
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            padding: 2px 8px;
+            border-radius: 2px;
+            background: rgba(0, 255, 102, 0.05);
+        }
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; box-shadow: 0 0 8px #00ff66; }
+        }
+
+        /* 3. 섹션 공통 스타일 */
+        section {
+            padding: 120px 0 90px 0;
+            border-bottom: 1px solid #162238;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-family: var(--font-racing);
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 0; width: 40px; height: 3px;
+            background: var(--f1-red);
+        }
+
+        .section-subtitle {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+
+        /* 기본 애니메이션 효과 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 4. 첫페이지 (히어로 섹션) */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #131c30 0%, #06090f 100%);
+            position: relative;
+            padding-top: 100px;
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-family: var(--font-racing);
+            font-size: 4.2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .hero-title span { color: var(--f1-red); }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--text-sub);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .graphic-area {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 35px auto;
+            border-radius: 50%;
+            background: url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&q=80&w=200') center/cover;
+            border: 4px solid var(--f1-red);
+            box-shadow: 0 0 35px rgba(255, 24, 1, 0.4);
+            animation: pulse 3s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.05) rotate(5deg); }
+        }
+
+        /* 5. 소개 섹션 (INTRODUCE) */
+        .intro { background-color: #090e17; text-align: center; }
+        .intro-text {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            word-break: keep-all;
+        }
+
+        /* 6. 규칙 섹션 (RULES) */
+        .radio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .radio-box {
+            background: var(--card-bg);
+            border: 1px solid #1a263d;
+            border-radius: 8px;
+            padding: 30px 24px;
+            position: relative;
+            text-align: left;
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .radio-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: #203354;
+            transition: var(--transition);
+        }
+
+        .radio-wave-ui {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-bottom: 20px;
+            opacity: 0.4;
+            transition: var(--transition);
+        }
+
+        .radio-wave-ui span {
+            display: inline-block;
+            width: 2px;
+            background-color: var(--text-sub);
+            border-radius: 1px;
+        }
+        .radio-wave-ui span:nth-child(1) { height: 12px; }
+        .radio-wave-ui span:nth-child(2) { height: 22px; }
+        .radio-wave-ui span:nth-child(3) { height: 16px; }
+        .radio-wave-ui span:nth-child(4) { height: 28px; }
+        .radio-wave-ui span:nth-child(5) { height: 10px; }
+
+        .radio-tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--f1-red); 
+            letter-spacing: 1px;
+            margin-left: auto;
+            border: 1px solid rgba(255, 24, 1, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .radio-box h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .radio-box p {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .radio-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--f1-red);
+            box-shadow: 0 0 20px rgba(255, 24, 1, 0.25);
+        }
+
+        .radio-box:hover::before {
+            background: var(--f1-red);
+        }
+
+        .radio-box:hover .radio-wave-ui {
+            opacity: 1;
+        }
+        .radio-box:hover .radio-wave-ui span {
+            background-color: var(--f1-red);
+        }
+
+        /* 7. 최애 팀 세션 (TEAM) */
+        .team-section {
+            background-color: #090e17;
+        }
+
+        .ferrari-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .ferrari-main-card {
+            background: linear-gradient(135deg, #1b1212 0%, var(--card-bg) 100%);
+            border: 1px solid #2d1818; 
+            border-left: 5px solid var(--f1-red);
+            padding: 40px 30px;
+            border-radius: 8px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .ferrari-badge {
+            display: inline-block;
+            background: var(--ferrari-gold);
+            color: #000000;
+            font-family: var(--font-racing);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 2px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+            letter-spacing: 0.5px;
+        }
+
+        .ferrari-grid-sub {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .ferrari-sub-card {
+            background: var(--card-bg);
+            border: 1px solid #1a263d;
+            border-radius: 8px;
+            padding: 26px;
+            text-align: left;
+            transition: var(--transition);
+        }
+
+        .ferrari-sub-card:hover {
+            border-color: rgba(255, 24, 1, 0.5);
+            transform: scale(1.02);
+        }
+
+        .sub-card-title {
+            font-family: var(--font-racing);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-card-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 12px;
+            background: var(--f1-red);
+        }
+
+        .driver-names {
+            font-size: 1.15rem;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+        .driver-names span {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            font-weight: 400;
+            margin-left: 6px;
+        }
+
+        .stat-list {
+            list-style: none;
+            font-size: 0.95rem;
+        }
+        .stat-list li {
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .stat-list li em {
+            font-style: normal;
+            color: var(--f1-red);
+            font-weight: 700;
+            font-family: var(--font-mono);
+        }
+
+        /* 8. 코어 어트랙트 섹션 (CORE ATTRACT) */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            text-align: left;
+        }
+
+        .core-card {
+            background-color: var(--card-bg);
+            padding: 40px 28px;
+            border-radius: 0px; 
+            border: 1px solid #1a263d;
+            border-bottom: 4px solid #203354; 
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .core-card::after {
+            content: 'PIT STOP ZONE';
+            font-family: var(--font-racing);
+            position: absolute;
+            bottom: 10px; right: 15px;
+            font-size: 0.65rem;
+            color: var(--text-sub);
+            opacity: 0.15;
+        }
+
+        .core-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--f1-red);
+            border-bottom: 4px solid var(--f1-red);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.6);
+        }
+
+        .card-icon {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .card-h3 {
+            font-size: 1.35rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* 9. 갤러리 섹션 (GALLERY) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .gallery-card {
+            aspect-ratio: 16/9;
+            perspective: 1400px;
+        }
+
+        .gallery-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .gallery-card:hover .gallery-card-inner {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+        }
+
+        .gallery-card.flipped .gallery-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .gallery-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 8px;
+            border: 1px solid #1a263d;
+            overflow: hidden;
+        }
+
+        .gallery-front {
+            background-color: var(--card-bg);
+        }
+
+        .gallery-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .gallery-card:hover .gallery-front img {
+            transform: scale(1.04);
+            filter: brightness(0.75);
+        }
+
+        .gallery-front-caption {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            padding: 14px 16px;
+            background: linear-gradient(to top, rgba(3,5,10,0.9), rgba(3,5,10,0));
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .gallery-back {
+            background: var(--card-bg);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 26px 28px;
+            gap: 10px;
+        }
+
+        .gallery-back .radio-tag {
+            margin-left: 0;
+        }
+
+        .gallery-back h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+
+        .gallery-back p {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+
+        /* 10. 버튼 및 인터랙션 (F1 모달 구조 고도화) */
+        .cta-btn {
+            display: inline-block;
+            background: #ffffff;
+            color: #070b12;
+            padding: 14px 36px;
+            font-family: var(--font-racing);
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+            transition: var(--transition);
+            text-transform: uppercase;
+            transform: skewX(-15deg); /* 기울임 레이싱 버튼 */
+        }
+
+        .cta-btn > span {
+            display: inline-block;
+            transform: skewX(15deg); /* 글자는 똑바로 */
+        }
+
+        .cta-btn:hover {
+            transform: skewX(-15deg) scale(1.03);
+            background: var(--f1-red);
+            color: white;
+            box-shadow: 0 8px 20px rgba(255, 24, 1, 0.4);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 7, 12, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* F1 레이싱 그리드 & 테두리 스타일 적용한 모달 디자인 */
+        .modal-content {
+            background: linear-gradient(145deg, #0d1322, #070b14);
+            padding: 40px;
+            border-radius: 4px;
+            max-width: 550px;
+            width: 90%;
+            border: 2px solid var(--f1-red);
+            position: relative;
+            transform: translateY(-30px) skewX(-5deg);
+            transition: var(--transition);
+            box-shadow: 0 20px 50px rgba(255, 24, 1, 0.2);
+        }
+
+        /* 레이싱 체크무늬 탑 바 데코 */
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 8px;
+            background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), 
+                              linear-gradient(45deg, #000 25%, #fff 25%, #fff 75%, #000 75%, #000);
+            background-size: 16px 16px;
+            background-position: 0 0, 8px 8px;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0) skewX(0deg);
+        }
+
+        .modal-title-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+        }
+
+        .modal-title-area h2 {
+            font-family: var(--font-racing);
+            font-size: 1.6rem;
+            text-transform: uppercase;
+        }
+
+        .modal-body {
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            line-height: 1.8;
+            word-break: keep-all;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: none; border: none;
+            color: var(--text-sub); font-size: 1.8rem;
+            transition: var(--transition);
+        }
+        .modal-close:hover {
+            color: var(--f1-red);
+            transform: rotate(90deg);
+        }
+
+        /* 11. 푸터 */
+        .footer {
+            background: #04060a;
+            padding: 40px 0;
+            text-align: center;
+            color: #4a576c;
+            font-size: 0.85rem;
+            border-top: 1px solid #162238;
+        }
+        .footer-logo {
+            font-family: var(--font-racing);
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 10px;
+        }
+
+        /* 12. 반응형 분기점 */
+        @media (max-width: 960px) {
+            .radio-grid, .grid-3, .ferrari-grid {
+                grid-template-columns: 1fr;
+            }
+            .ferrari-grid-sub {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .ferrari-grid-sub, .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-title { font-size: 2.6rem; }
+            .nav-menu-wrapper { display: none; } /* 모바일 간소화 */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 커스텀 마우스 커서 (미디움 타이어) -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- 배경 파티클 캔버스 -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- 고정형 상단 내비게이션 바 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;">F1 <span>ARCHIVE</span></a>
+            <div class="nav-menu-wrapper">
+                <ul class="nav-menu">
+                    <li><a href="#intro" class="nav-link">INTRO</a></li>
+                    <li><a href="#rules" class="nav-link">RULES</a></li>
+                    <li><a href="#team" class="nav-link">TEAM</a></li>
+                    <li><a href="#core" class="nav-link">ATTRACT</a></li>
+                    <li><a href="#gallery" class="nav-link">GALLERY</a></li>
+                </ul>
+                <div class="live-signal">
+                    <div class="live-dot"></div>
+                    <span>2026 SEASON LIVE</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 스크롤 진행률 상단 바 -->
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- 1. 첫페이지 (Home) -->
+    <header class="hero">
+        <div class="container hero-content fade-in">
+            <div class="graphic-area"></div>
+            <h1 class="hero-title">0.001초의 승부,<br>모터스포츠의 정점 <span>FORMULA 1</span></h1>
+            <p class="hero-subtitle">가장 뜨겁고 지적인 레이싱의 세계를 관람하다</p>
+            <button class="cta-btn" onclick="document.getElementById('intro').scrollIntoView({behavior: 'smooth'})">
+                <span>ENTER THE RACE 🏁</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 2. 소개 페이지 (INTRODUCE) -->
+    <section id="intro" class="intro">
+        <div class="container fade-in">
+            <div class="section-header">
+                <h2 class="section-title">INTRODUCE</h2>
+                <p class="section-subtitle">지구상에서 가장 빠르고 화려한 단 하나의 카레이싱</p>
+            </div>
+            <p class="intro-text">
+                포뮬러 원(Formula 1)은 국제자동차연맹(FIA)이 주관하는 세계 최고의 자동차 경주 대회입니다. 전 세계를 횡단하며 열리는 각 그랑프리마다 11개 팀, 단 22명의 선택받은 드라이버들만이 서킷 위에서 한계에 도전합니다. 시속 350km를 넘나드는 압도적인 스피드와 정교한 팀 전략이 결합된, 스포츠 그 이상의 종합 예술입니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- 3. 규칙 페이지 (RULES) -->
+    <section id="rules">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">TRACK RULES</h2>
+                <p class="section-subtitle">무전 너머 들려오는 F1 본선의 필수 핵심 규칙</p>
+            </div>
+            <div class="radio-grid">
+                <!-- 타이어 전략 -->
+                <div class="radio-box">
+                    <div class="radio-wave-ui">
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <div class="radio-tag">01 RADIO OVER</div>
+                    </div>
+                    <h3>타이어 컴파운드 의무</h3>
+                    <p>경기가 열리는 동안 드라이버는 성향(단단함과 그립력)이 서로 다른 최소 2종류 이상의 드라이 타이어를 반드시 교체 사용해야 합니다. 소프트 타이어의 폭발적인 스피드와 하드 타이어의 오랜 내구성의 안배가 포인트입니다.</p>
+                </div>
+
+                <!-- 피트스톱 전략 -->
+                <div class="radio-box">
+                    <div class="radio-wave-ui">
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <div class="radio-tag">02 RADIO OVER</div>
+                    </div>
+                    <h3>2초대의 미학, 피트스톱</h3>
+                    <p>타이어 교체를 위해 피트로 들어오는 짧은 순간, 약 20명의 크루가 일사불란하게 움직여 단 2초 만에 작업을 완료합니다. 타이어 타이밍을 조절해 순위를 뺏고 뺏기는 언더컷, 오버컷 두뇌 싸움의 정점입니다.</p>
+                </div>
+
+                <!-- 오버테이크 모드 전략 -->
+                <div class="radio-box">
+                    <div class="radio-wave-ui">
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <div class="radio-tag">03 RADIO OVER</div>
+                    </div>
+                    <h3>2026 오버테이크 모드</h3>
+                    <p>기존의 기계식 가변 플랩(DRS) 시스템을 대체하여 도입된 새로운 규정입니다. 배터리에 비축된 하이브리드 전기에너지를 드라이버가 직선 구간에서 수동으로 순간 방출(MOM)하여 극한의 추월 가속을 쥐어짜냅니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 마이 페이버릿 팀 페이지 (TEAM) -->
+    <section id="team" class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">MY FAVORITE TEAM</h2>
+                <p class="section-subtitle">모터스포츠 그 자체이자 살아있는 신화, 스쿠데리아 페라리</p>
+            </div>
+            
+            <div class="ferrari-grid">
+                <div class="ferrari-main-card">
+                    <div class="ferrari-badge">SCUDERIA FERRARI</div>
+                    <h3 style="font-family: var(--font-racing); font-size: 1.8rem; margin-bottom: 15px; font-weight: 700;">스쿠데리아 페라리</h3>
+                    <p style="color: var(--text-sub); font-size: 1rem; line-height: 1.7;">
+                        1950년 F1 출범 이래 단 한 시즌도 빠짐없이 참가해 온 유일무이한 역사적 팀입니다. 창립자 엔초 페라리의 레이싱 철학을 계승하며, 붉은색 머신(로소 코르사)과 도약하는 말 문양은 전 세계 수많은 '티포시(Tifosi)' 팬덤을 광열하게 만드는 F1의 심장과 같습니다.
+                    </p>
+                </div>
+
+                <div class="ferrari-grid-sub">
+                    <div class="ferrari-sub-card">
+                        <div class="sub-card-title">Current Line-up</div>
+                        <div class="driver-names" style="margin-bottom: 10px;">🏎️ 샤를 르클레르 <span>Monaco</span></div>
+                        <div class="driver-names">🏎️ 루이스 해밀턴 <span>United Kingdom</span></div>
+                    </div>
+
+                    <div class="ferrari-sub-card">
+                        <div class="sub-card-title">Historical Records</div>
+                        <ul class="stat-list">
+                            <li>컨스트럭터 챔피언 <em>16회 (역대 1위)</em></li>
+                            <li>드라이버 챔피언 <em>15회</em></li>
+                            <li>그랑프리 우승 <em>250+회</em></li>
+                        </ul>
+                    </div>
+
+                    <div class="ferrari-sub-card">
+                        <div class="sub-card-title">Recent Victory</div>
+                        <p style="font-size: 1.1rem; font-weight: 700; margin-bottom: 5px; color: var(--f1-red);">2026 영국 그랑프리</p>
+                        <p style="color: var(--text-sub); font-size: 0.85rem;">가장 최근 경기에서 샤를 르클레르가 최상위권 챔피언십 타이틀 경쟁 복귀!</p>
+                    </div>
+
+                    <div class="ferrari-sub-card">
+                        <div class="sub-card-title">The Tifosi Spirit</div>
+                        <p style="font-size: 0.95rem; color: var(--text-sub);">페라리는 단순한 스포츠 구단이 아닌 이탈리아의 자존심입니다. 전 세계 서킷을 붉게 물들이는 거대한 장막과 뜨거운 응원 문화는 F1 최고의 시각적 장관입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 코어어트랙트 페이지 (CORE ATTRACT) -->
+    <section id="core">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">CORE ATTRACT</h2>
+                <p class="section-subtitle">전 세계 수억 명의 팬들을 매료시킨 F1만의 3가지 핵심 매력</p>
+            </div>
+            <div class="grid-3">
+                <div class="core-card" onclick="openModal('🏎️ 하이테크 기계 공학', '머신 한 대에 수천억 원의 자본과 가치가 투입되며, 우주선 수준의 에어로다이내믹스(공기역학) 기술이 총동원됩니다. 지구상에서 가장 정밀하고 빠른 기계공학의 진수를 눈앞에서 목격하는 경이로움이 있습니다.')">
+                    <div class="card-icon">🏎️</div>
+                    <h3 class="card-h3">하이테크 공학 <span>➔</span></h3>
+                    <p style="color: var(--text-sub); font-size: 0.9rem;">인류 자동차 기술의 최전선과 천문학적 자본이 만들어내는 하이엔드 테크놀로지.</p>
+                </div>
+                <div class="core-card" onclick="openModal('🌍 글로벌 스케일 & 시티 서킷', '2~3주마다 전 세계 곳곳으로 나라를 바꿔가며 개최되는 그랑프리는 도시 전체를 거대한 축제의 장으로 만듭니다. 모나코의 해안가, 라스베이거스의 화려한 야경, 싱가포르의 도심 빌딩 숲을 그대로 서킷으로 사용하는 시가지 서킷의 아름다운 비주얼과, 현장감은 F1에서만 느낄 수 있는 독보적인 매력입니다.')">
+                    <div class="card-icon">🌍</div>
+                    <h3 class="card-h3">글로벌 스케일 <span>➔</span></h3>
+                    <p style="color: var(--text-sub); font-size: 0.9rem;">2~3주마다 전 세계를 순회하는 메가 스포츠의 압도적인 현장감과 시티 서킷의 절경.</p>
+                </div>
+                <div class="core-card" onclick="openModal('🏁 22인의 서사 & 관계성', '전 세계에서 단 11개 팀, 22명의 드라이버에게만 운전석이 허락되는 지극히 좁고 특별한 세계입니다. 선수 한 명 한 명의 스토리부터 성장 과정을 깊게 지켜보며 몰입하게 되고, 서킷 위에서는 목숨을 걸고 싸우지만 밖에서는 유쾌하고 끈끈한 드라이버들 간의 관계성을 지켜보는 재미가 쏠쏠합니다.')">
+                    <div class="card-icon">🏁</div>
+                    <h3 class="card-h3">22인의 관계성 <span>➔</span></h3>
+                    <p style="color: var(--text-sub); font-size: 0.9rem;">오직 22명에게만 허락된 시트, 드라이버 개개인의 끈끈한 유대와 서사가 주는 깊은 몰입감.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. 갤러리 페이지 (GALLERY) -->
+    <section id="gallery" style="background-color: #090e17;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">GALLERY</h2>
+                <p class="section-subtitle">F1의 역동성과 스케일을 담은 4가지 시각적 순간들</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-card" onclick="this.classList.toggle('flipped')">
+                    <div class="gallery-card-inner">
+                        <div class="gallery-face gallery-front">
+                            <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&q=80&w=600" alt="F1 머신">
+                            <div class="gallery-front-caption">RED BULL RACING HONDA</div>
+                        </div>
+                        <div class="gallery-back">
+                            <div class="radio-tag">SCENE 01</div>
+                            <h3>서킷 위의 붉은 황소</h3>
+                            <p>공기역학적 완성도를 보여주는 섀시와 아스팔트를 움켜쥐며 나아가는 코너링 머신의 다이내믹한 뷰.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- 갤러리 카드 반복 추가 가능 영역 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- F1 리스타일 고도화 모달 -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-title-area">
+                <span style="color: var(--f1-red); font-weight: bold;">[TELEMETRY]</span>
+                <h2 id="modalTitle">모달 제목</h2>
+            </div>
+            <div class="modal-body" id="modalBody">
+                모달 본문 내용입니다.
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-logo">FORMULA 1 ARCHIVE</div>
+        <p>&copy; 2026 Hobby Archive. Designed with F1 Racing Spirit.</p>
+    </footer>
+
+    <!-- 인터랙션 및 이펙트 스크립트 -->
+    <script>
+        /* A. 커스텀 마우스 커서 스크립트 */
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // 호버 시 효과 줄 요소들 바인딩
+        const hoverElements = document.querySelectorAll('a, button, .core-card, .gallery-card, .modal-close');
+        hoverElements.forEach(elem => {
+            elem.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            elem.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        /* B. 스크롤 진행률 바 스크립트 */
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        /* C. 은은한 배경 파티클 스크립트 (Canvas) */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedY = Math.random() * 0.8 + 0.2;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.y -= this.speedY;
+                if (this.y < -10) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        /* D. 모달 컨트롤 함수 */
+        function openModal(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerText = text;
+            document.getElementById('infoModal').classList.add('active');
+            cursor.classList.remove('hover'); // 모달 오픈 시 강제 리셋
+        }
+
+        function closeModal() {
+            document.getElementById('infoModal').classList.remove('active');
+        }
+
+        // 모달 바깥 영역 클릭시 닫기
+        document.getElementById('infoModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
