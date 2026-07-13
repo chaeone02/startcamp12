@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이채원 | Portfolio</title>
+    <!-- 폰트 및 아이콘 로드 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* 라이트 모드 변수 - 원조 시그니처 핑크 컬러 (#d94d72) */
+            --bg-main: #faf7f4;
+            --bg-card: #ffffff;
+            --text-main: #2d2d2d;
+            --text-muted: #666666;
+            --primary: #d94d72;
+            --primary-light: #fbeef1;
+            --accent: #ffd166;
+            --border: #e6e0da;
+            --nav-bg: rgba(250, 247, 244, 0.8);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            /* 다크 모드 변수 */
+            --bg-main: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #e5e5e5;
+            --text-muted: #a0a0a0;
+            --primary: #ff6289;
+            --primary-light: #2c1a1f;
+            --accent: #ffd166;
+            --border: #333333;
+            --nav-bg: rgba(18, 18, 18, 0.8);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            transition: var(--transition);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 배경 파티클 캔버스 */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 1. 움직이는 하트 커서 애니메이션 스타일 (크기 1.3배 상향 조정) */
+        .heart-pop {
+            position: fixed;
+            font-size: calc(1rem * 1.3); /* [수정] 1.3배 크기로 확대 */
+            color: var(--primary);
+            pointer-events: none;
+            z-index: 9999;
+            animation: popAndFade 0.8s ease-out forwards;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes popAndFade {
+            0% {
+                transform: translate(-50%, -50%) scale(0.78);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -120%) scale(1.56);
+                opacity: 0;
+            }
+        }
+
+        /* 상단 네비게이션 & 스크롤 진행률 */
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scroll-progress-container {
+            width: 100%;
+            height: 4px;
+            background: transparent;
+        }
+
+        .scroll-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.1s ease;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .nav-logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .theme-toggle-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* 공통 섹션 구조 및 목차 디자인 복구 (사진2 스타일) */
+        section {
+            padding: 9rem 2rem 5rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1040px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* 사진2 기반 목차 헤더 템플릿 */
+        .section-header {
+            margin-bottom: 3.5rem;
+            text-align: left;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .section-main-title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.03em;
+        }
+
+        /* === 1. 자기소개 섹션 === */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 3.5rem;
+            align-items: center;
+        }
+
+        .about-profile {
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 240px;
+            height: auto;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .profile-name {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-top: 1rem;
+        }
+
+        .about-content {
+            background: var(--bg-card);
+            padding: 2.8rem;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.01);
+        }
+
+        .about-bio {
+            font-size: 1.1rem;
+            margin-bottom: 2.2rem;
+            word-break: keep-all;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .info-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .info-item i {
+            color: var(--primary);
+            font-size: 1.1rem;
+            width: 32px;
+            height: 32px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* [수정 1] F1 관람용 인라인 이동 버튼 스타일 */
+        .f1-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: var(--primary);
+            color: #ffffff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 3px 8px rgba(217, 77, 114, 0.15);
+            margin-left: 4px;
+        }
+
+        .f1-link-btn:hover {
+            background: #b83a5c;
+            transform: translateY(-1px);
+            color: #ffffff;
+        }
+
+        /* === 2. 레벨 및 스택 섹션 (GitHub 리드미 테마 개편) === */
+        .stack-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stack-card {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .stack-card h3 {
+            margin-bottom: 2rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+        }
+
+        /* [수정 2] GitHub Readme 컴포넌트 화 */
+        .github-readme-row {
+            display: flex;
+            align-items: center;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.1rem;
+            border-radius: 12px;
+            gap: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .github-readme-row:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 좌측 로딩 원형 차트 */
+        .readme-pie {
+            width: 28px;
+            height: 28px;
+            transform: rotate(-90deg);
+            flex-shrink: 0;
+        }
+
+        .readme-pie circle {
+            fill: none;
+            stroke-width: 32;
+        }
+
+        .readme-pie .bg-circle {
+            stroke: var(--border);
+        }
+
+        .readme-pie .fill-circle {
+            stroke: var(--primary);
+            stroke-dasharray: 100 100;
+            stroke-dashoffset: 100;
+            animation: fillCircleAnim 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fillCircleAnim {
+            to { stroke-dashoffset: var(--dash-offset); }
+        }
+
+        .readme-body {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .readme-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            min-width: 85px;
+        }
+
+        .readme-bar-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* 기존보다 콤팩트하게 줄인 고정형 막대바 */
+        .readme-bar-bg {
+            width: 100px;
+            height: 8px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .readme-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: var(--bar-w); /* 정적 고정 가로 폭 */
+        }
+
+        .readme-percent-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            min-width: 32px;
+            text-align: right;
+        }
+
+        /* [수정 3] 사진1 매칭 알고리즘 컴포넌트 스타일 */
+        .algo-level-container {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .algo-title-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .algo-card-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 1.3rem 1.8rem;
+            gap: 1.2rem;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.01);
+        }
+
+        .algo-badge {
+            background: var(--primary);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.9rem;
+            padding: 0.45rem 1.1rem;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .algo-description-text {
+            font-size: 0.98rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .algo-description-text .highlight-emphasis {
+            color: #c83759;
+            font-weight: 700;
+        }
+
+        /* === 3. 목표 (Goal) 섹션 (사진3 카드 2분할 스타일 적용) === */
+        .goal-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .goal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.01);
+        }
+
+        .goal-title-area {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .goal-badge-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background-color: var(--primary);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .goal-card h3 {
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+
+        .goal-sub-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .goal-sub-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .goal-term-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.4rem;
+        }
+
+        .goal-sub-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: var(--text-main);
+        }
+
+        .goal-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            word-break: keep-all;
+        }
+
+        /* === 4. 컨택트 섹션 (사진4 스타일 완벽 구현) === */
+        .photo4-container {
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .photo4-heart-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            display: inline-block;
+        }
+
+        .photo4-text {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.6;
+            word-break: keep-all;
+            margin-bottom: 3.5rem;
+        }
+
+        .photo4-text span {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .photo4-social-box {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .photo4-icon-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .photo4-icon-btn:hover {
+            background-color: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .photo4-sendme-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1.1rem 3.5rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(217, 77, 114, 0.25);
+            transition: var(--transition);
+            letter-spacing: 0.02em;
+        }
+
+        .photo4-sendme-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(217, 77, 114, 0.35);
+        }
+
+        /* 모달 팝업 구조 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1.8rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.4rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-main);
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .form-submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        /* === 📱 반응형 분기점 (모바일 최적화) === */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 60px);
+                background: var(--bg-card);
+                flex-direction: column;
+                padding: 3rem 2rem;
+                gap: 2rem;
+                transition: var(--transition);
+                border-top: 1px solid var(--border);
+                align-items: center;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .info-meta {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+
+            .stack-layout, .goal-grid-layout {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 7rem 1.5rem 4rem 1.5rem;
+            }
+
+            .section-main-title {
+                font-size: 1.9rem;
+            }
+
+            .photo4-text {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 파티클 배경 효과 -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- 네비게이션 탑 바 -->
+    <div class="nav-wrapper">
+        <div class="scroll-progress-container">
+            <div class="scroll-progress-bar" id="progressBar"></div>
+        </div>
+        <nav class="navbar">
+            <a href="#" class="nav-logo">CHAEWON.</a>
+            <button class="menu-toggle" id="menuToggle" aria-label="메뉴 열기">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#about" class="nav-link">About me</a></li>
+                <li><a href="#stack" class="nav-link">Stack</a></li>
+                <li><a href="#goal" class="nav-link">Goal</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li>
+                    <button class="theme-toggle-btn" id="themeToggle" aria-label="테마 전환">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- 1. 자기소개 섹션 -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">01 · About Me</span>
+                <h2 class="section-main-title">저를 소개할게요</h2>
+            </div>
+            
+            <div class="about-grid">
+                <div class="about-profile">
+                    <img src="IMG_3372.png" alt="이채원 프로필 이미지" class="profile-img" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500';">
+                    <h3 class="profile-name">이채원</h3>
+                </div>
+                <div class="about-content">
+                    <p class="about-bio">
+                        안녕하세요! 끊임없이 배우고 코드를 개선해나가는 개발자 이채원입니다. 저는 새로운 기술을 탐구하고, 이를 효율적인 클린 코드로 녹여내는 개발을 지향합니다.
+                    </p>
+                    <div class="info-meta">
+                        <div class="info-item">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            <div>
+                                <div class="info-label">나이</div>
+                                <div class="info-value">02년생</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <div>
+                                <div class="info-label">졸업년월</div>
+                                <div class="info-value">2026.02</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-fingerprint"></i>
+                            <div>
+                                <div class="info-label">MBTI</div>
+                                <div class="info-value">INFJ</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <div>
+                                <div class="info-label">위치</div>
+                                <div class="info-value">경기도 안양</div>
+                            </div>
+                        </div>
+                        <div class="info-item" style="grid-column: span 2;">
+                            <i class="fa-solid fa-icons"></i>
+                            <div>
+                                <div class="info-label">취미</div>
+                                <div class="info-value">
+                                    음악 감상, <!-- [수정 1] F1 관람 항목 버튼으로 변경 구현 -->
+                                    <a href="https://ai-onboarding-f1.netlify.app/f1.html" target="_blank" class="f1-link-btn">🏁 F1 관람</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 레벨 및 스택 섹션 -->
+    <section id="stack">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">02 · Level & Stack</span>
+                <h2 class="section-main-title">지금의 저는 이 정도예요</h2>
+            </div>
+            
+            <div class="stack-layout">
+                <!-- [수정 2] GitHub Readme 스타일 원형 차트 연동 및 수치 변경 (70, 80, 60, 60) -->
+                <div class="stack-card">
+                    <h3><i class="fa-solid fa-server" style="color:var(--primary)"></i> Backend Stack</h3>
+                    
+                    <!-- Java: 70% -->
+                    <div class="github-readme-row">
+                        <div class="readme-pie">
+                            <svg viewBox="0 0 32 32">
+                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
+                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 30;"/>
+                            </svg>
+                        </div>
+                        <div class="readme-body">
+                            <div class="readme-name">Java</div>
+                            <div class="readme-bar-wrapper">
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 70%;"></div></div>
+                                <div class="readme-percent-text">70%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spring: 60% -->
+                    <div class="github-readme-row">
+                        <div class="readme-pie">
+                            <svg viewBox="0 0 32 32">
+                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
+                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 40;"/>
+                            </svg>
+                        </div>
+                        <div class="readme-body">
+                            <div class="readme-name">Spring</div>
+                            <div class="readme-bar-wrapper">
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 60%;"></div></div>
+                                <div class="readme-percent-text">60%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MySQL: 60% -->
+                    <div class="github-readme-row">
+                        <div class="readme-pie">
+                            <svg viewBox="0 0 32 32">
+                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
+                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 40;"/>
+                            </svg>
+                        </div>
+                        <div class="readme-body">
+                            <div class="readme-name">MySQL</div>
+                            <div class="readme-bar-wrapper">
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 60%;"></div></div>
+                                <div class="readme-percent-text">60%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Python: 80% -->
+                    <div class="github-readme-row">
+                        <div class="readme-pie">
+                            <svg viewBox="0 0 32 32">
+                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
+                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 20;"/>
+                            </svg>
+                        </div>
+                        <div class="readme-body">
+                            <div class="readme-name">Python</div>
+                            <div class="readme-bar-wrapper">
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 80%;"></div></div>
+                                <div class="readme-percent-text">80%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="stack-card">
+                    <h3><i class="fa-solid fa-screwdriver-wrench" style="color:var(--accent)"></i> Tools & Others</h3>
+                    
+                    <div class="github-readme-row">
+                        <div class="readme-pie">
+                            <svg viewBox="0 0 32 32">
+                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
+                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 20;"/>
+                            </svg>
+                        </div>
+                        <div class="readme-body">
+                            <div class="readme-name">Git / GitHub</div>
+                            <div class="readme-bar-wrapper">
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 80%;"></div></div>
+                                <div class="readme-percent-text">80%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="github-readme-row">
+                        <div class="readme-pie">
+                            <svg viewBox="0 0 32 32">
+                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
+                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 30;"/>
+                            </svg>
+                        </div>
+                        <div class="readme-body">
+                            <div class="readme-name">Figma</div>
+                            <div class="readme-bar-wrapper">
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 70%;"></div></div>
+                                <div class="readme-percent-text">70%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="github-readme-row">
+                        <div class="readme-pie">
+                            <svg viewBox="0 0 32 32">
+                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
+                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 10;"/>
+                            </svg>
+                        </div>
+                        <div class="readme-body">
+                            <div class="readme-name">Notion</div>
+                            <div class="readme-bar-wrapper">
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 90%;"></div></div>
+                                <div class="readme-percent-text">90%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- [수정 3] 사진 1과 매칭되는 알고리즘 레벨 레이아웃을 하단 영역에 배치 -->
+            <div class="algo-level-container">
+                <div class="algo-title-label">Algorithm Level</div>
+                <div class="algo-card-box">
+                    <div class="algo-badge">입문</div>
+                    <div class="algo-description-text">아직 <span class="highlight-emphasis">초보 단계</span>입니다. 프로그래머스 기준 <span class="highlight-emphasis">1~2단계</span>를 풀고 있어요.</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 3. 목표 (Goal) 섹션 -->
+    <section id="goal">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">03 · Goal</span>
+                <h2 class="section-main-title">앞으로의 목표예요</h2>
+            </div>
+            
+            <div class="goal-grid-layout">
+                <!-- 카드 A: 개발자로서의 목표 -->
+                <div class="goal-card">
+                    <div class="goal-title-area">
+                        <div class="goal-badge-icon">A</div>
+                        <h3>개발자로서의 목표</h3>
+                    </div>
+                    
+                    <div class="goal-sub-section">
+                        <span class="goal-term-tag">Short-term</span>
+                        <h4 class="goal-sub-title">금융권 도메인 기반 웹 백엔드 개발</h4>
+                        <p class="goal-desc">안정성과 대용량 트래픽 처리가 생명인 금융 도메인 지식을 함양하고, 탄탄한 웹 백엔드 아키텍처를 설계할 수 있는 역량을 다집니다.</p>
+                    </div>
+                    <div class="goal-sub-section" style="margin-top: 1.5rem;">
+                        <span class="goal-term-tag">Mid-term</span>
+                        <h4 class="goal-sub-title">인프라 및 PM으로의 유연한 직무 확장</h4>
+                        <p class="goal-desc">개발 능력을 고도화한 이후 대규모 클라우드 인프라 운영 기술을 체득하거나, 기술적 설계를 바탕으로 비즈니스를 리딩하는 제품 관리자(PM) 영역으로 시야를 넓힙니다.</p>
+                    </div>
+                </div>
+
+                <!-- 카드 B: 싸피를 통해 얻고 싶은 것 -->
+                <div class="goal-card">
+                    <div class="goal-title-area">
+                        <div class="goal-badge-icon">B</div>
+                        <h3>싸피를 통해 얻고 싶은 것</h3>
+                    </div>
+                    
+                    <div class="goal-sub-section">
+                        <span class="goal-term-tag">Short-term</span>
+                        <h4 class="goal-sub-title">실무 프로젝트 경험 & AI 역량 확장</h4>
+                        <p class="goal-desc">협업 중심의 밀도 높은 프로젝트 실전 경험을 완수하고, 최근 개발 트렌드인 AI 핵심 기술을 결합하여 가치를 창출하는 융합형 백엔드 개발자로 거듭납니다.</p>
+                    </div>
+                    <div class="goal-sub-section" style="margin-top: 1.5rem;">
+                        <span class="goal-term-tag">Mid-term</span>
+                        <h4 class="goal-sub-title">취준 루틴화와 평생 함께할 러닝메이트</h4>
+                        <p class="goal-desc">지치지 않는 체계적인 취업 준비 루틴을 확립하고, 매일 함께 밤샘 코딩하며 서로 자극을 주고받을 수 있는 소중한 동료 집단을 완성합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 컨택트 섹션 -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-header" style="text-align: center;">
+                <span class="section-badge">04 · Contact</span>
+                <h2 class="section-main-title">함께하고 싶어요</h2>
+            </div>
+            
+            <div class="photo4-container">
+                <span class="photo4-heart-icon">❤️</span>
+                <p class="photo4-text">
+                    전공자이지만 아직 부족한 게 많다고 느끼고 있습니다.<br>
+                    싸피를 통해 <span>함께 성장</span>하고 싶습니다!
+                </p>
+                
+                <div class="photo4-social-box">
+                    <a href="https://instagram.com/chaerry.one" target="_blank" class="photo4-icon-btn" aria-label="인스타그램"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://github.com" target="_blank" class="photo4-icon-btn" aria-label="깃허브"><i class="fa-brands fa-github"></i></a>
+                </div>
+
+                <button class="photo4-sendme-btn" id="openModalBtn"><i class="fa-regular fa-envelope"></i> send me!</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 메시지 모달 팝업 창 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <button class="modal-close" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="modal-title">send me!</h3>
+            <form id="messageForm">
+                <div class="form-group">
+                    <label for="senderName">보내는 분</label>
+                    <input type="text" id="senderName" placeholder="성함을 입력해 주세요." required>
+                </div>
+                <div class="form-group">
+                    <label for="messageContent">내용</label>
+                    <textarea id="messageContent" rows="5" placeholder="저에게 남겨주고 싶은 메세지를 보내주세요!" required></textarea>
+                </div>
+                <button type="submit" class="form-submit-btn">send!</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. 다크모드/라이트모드 컨트롤 ---
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                themeIcon.className = 'fa-solid fa-moon';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fa-solid fa-sun';
+            }
+        });
+
+        // --- 2. 상단 바 진행률 계산 ---
+        const progressBar = document.getElementById('progressBar');
+        
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + '%';
+        });
+
+        // --- 3. [수정 5] 마우스 오버 및 정적 유휴 상태 하트 자동 분출 로직 ---
+        let lastHeartTime = 0;
+        let lastX = window.innerWidth / 2;
+        let lastY = window.innerHeight / 2;
+
+        // 커서 이동 시 위치 트래킹 및 하트 흔적 분출
+        window.addEventListener('mousemove', (e) => {
+            lastX = e.clientX;
+            lastY = e.clientY;
+            
+            const now = Date.now();
+            if (now - lastHeartTime > 70) { 
+                createHeart(lastX, lastY);
+                lastHeartTime = now;
+            }
+        });
+
+        // 마우스가 완전히 정지해(가만히) 있어도 400ms 간격으로 계속 하트를 발사하는 인터벌 구성
+        setInterval(() => {
+            createHeart(lastX, lastY);
+        }, 400);
+
+        // 클릭 시에도 하트 레이어가 터져 나오도록 연동
+        window.addEventListener('click', (e) => {
+            createHeart(e.clientX, e.clientY);
+        });
+
+        // 하트 엘리먼트 생성 팩토리 함수
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-pop');
+            heart.innerHTML = '❤️';
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            
+            // 미세한 랜덤 오프셋 스케일링을 더해 역동감 부여
+            const randomScale = Math.random() * 0.6 + 0.5;
+            heart.style.transform = `translate(-50%, -50%) scale(${randomScale})`;
+            
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 800);
+        }
+
+        // --- 4. 모바일 햄버거 메뉴 토글 제어 ---
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.querySelector('i').className = 'fa-solid fa-bars';
+            });
+        });
+
+        // --- 5. send me! 모달 레이어 팝업 제어 ---
+        const modalOverlay = document.getElementById('modalOverlay');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const messageForm = document.getElementById('messageForm');
+
+        openModalBtn.addEventListener('click', () => modalOverlay.classList.add('active'));
+        closeModalBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
+        
+        modalOverlay.addEventListener('click', (e) => {
+            if(e.target === modalOverlay) modalOverlay.classList.remove('active');
+        });
+
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('메시지가 이채원님에게 성공적으로 전송되었습니다!');
+            messageForm.reset();
+            modalOverlay.classList.remove('active');
+        });
+
+        // --- 6. 배경 미세 입자(파티클) 무한 애니메이션 ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 1;
+                this.speedX = Math.random() * 0.3 - 0.15;
+                this.speedY = Math.random() * 0.3 - 0.15;
+                this.opacity = Math.random() * 0.4 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                else if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                else if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${this.opacity})` : `rgba(217, 77, 114, ${this.opacity * 0.35})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.min(Math.floor(canvas.width / 30), 45);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+        window.addEventListener('resize', initParticles);
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
