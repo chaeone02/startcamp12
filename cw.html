@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>이채원 | Portfolio</title>
-    <!-- 폰트 및 아이콘 로드 -->
+    <!-- 폰트 및 아이콘 로드 (JetBrains Mono 추가) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -119,10 +120,12 @@
         }
 
         .nav-logo {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 1.3rem;
             font-weight: 800;
             color: var(--primary);
             text-decoration: none;
+            letter-spacing: -0.02em;
         }
 
         .nav-menu {
@@ -133,6 +136,7 @@
         }
 
         .nav-link {
+            font-family: 'JetBrains Mono', monospace;
             color: var(--text-main);
             text-decoration: none;
             font-weight: 600;
@@ -192,6 +196,7 @@
         }
 
         .section-badge {
+            font-family: 'JetBrains Mono', monospace;
             display: inline-block;
             background-color: var(--primary-light);
             color: var(--primary);
@@ -209,6 +214,80 @@
             font-weight: 800;
             color: var(--text-main);
             letter-spacing: -0.03em;
+        }
+
+        /* === 0. 메인 홈(Hero) 섹션 === */
+        .home-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 2rem 2rem;
+            position: relative;
+        }
+
+        .home-badge {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            letter-spacing: 0.03em;
+            margin-bottom: 2rem;
+            display: inline-block;
+        }
+
+        .home-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.4;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            margin-bottom: 2.5rem;
+            word-break: keep-all;
+        }
+
+        .home-title .highlight {
+            color: var(--primary);
+        }
+
+        .home-profile-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        /* [요청반영 1] 사진 크기 기존 60px에서 3배(180px)로 확대 */
+        .home-profile-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .home-profile-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* [요청반영 2] 영어 글씨체 JetBrains Mono 폰트 및 사진처럼 넓은 간격 지정 */
+        .home-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            font-weight: 500;
         }
 
         /* === 1. 자기소개 섹션 === */
@@ -289,6 +368,7 @@
         }
 
         .f1-link-btn {
+            font-family: 'JetBrains Mono', monospace;
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
@@ -309,7 +389,6 @@
             color: #ffffff;
         }
 
-        /* F1 버튼 전용 말풍선 컨테이너 및 팝업 스타일 */
         .f1-container {
             position: relative;
             display: inline-block;
@@ -317,6 +396,7 @@
         }
 
         .f1-badge-popup {
+            font-family: 'JetBrains Mono', monospace;
             position: absolute;
             bottom: 130%; 
             left: 50%;
@@ -364,8 +444,9 @@
         }
 
         .stack-card h3 {
+            font-family: 'JetBrains Mono', monospace;
             margin-bottom: 2rem;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 0.6rem;
@@ -392,7 +473,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
 
-        /* 원형 도넛 차트 */
         .readme-pie {
             width: 32px;
             height: 32px;
@@ -428,6 +508,7 @@
         }
 
         .readme-name {
+            font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
             font-size: 0.95rem;
             min-width: 85px;
@@ -455,6 +536,7 @@
         }
 
         .readme-percent-text {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
             font-weight: 700;
             color: var(--text-muted);
@@ -462,7 +544,6 @@
             text-align: right;
         }
 
-        /* 한 줄 설명 팝업 툴팁 디자인 */
         .stack-tooltip {
             position: absolute;
             bottom: 115%;
@@ -500,13 +581,13 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* 알고리즘 레벨 컴포넌트 */
         .algo-level-container {
             width: 100%;
             margin-top: 1rem;
         }
 
         .algo-title-label {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
             font-weight: 700;
             color: var(--text-muted);
@@ -570,6 +651,7 @@
         }
 
         .goal-badge-icon {
+            font-family: 'JetBrains Mono', monospace;
             width: 28px;
             height: 28px;
             border-radius: 8px;
@@ -596,6 +678,7 @@
         }
 
         .goal-term-tag {
+            font-family: 'JetBrains Mono', monospace;
             display: inline-block;
             font-size: 0.75rem;
             font-weight: 700;
@@ -604,6 +687,7 @@
             padding: 0.15rem 0.5rem;
             border-radius: 4px;
             margin-bottom: 0.4rem;
+            text-transform: uppercase;
         }
 
         .goal-sub-title {
@@ -783,6 +867,7 @@
         }
 
         .modal-title {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 1.5rem;
             font-weight: 800;
             margin-bottom: 1.8rem;
@@ -818,6 +903,7 @@
         }
 
         .form-submit-btn {
+            font-family: 'JetBrains Mono', monospace;
             width: 100%;
             padding: 1rem;
             background: var(--primary);
@@ -832,6 +918,18 @@
 
         /* === 📱 반응형 분기점 (모바일 최적화) === */
         @media (max-width: 768px) {
+            .home-title {
+                font-size: 2.3rem;
+            }
+            .home-badge {
+                font-size: 0.8rem;
+                padding: 0.4rem 1.2rem;
+            }
+            .home-profile-circle {
+                width: 130px;
+                height: 130px;
+            }
+
             .nav-menu {
                 position: fixed;
                 top: 60px;
@@ -898,11 +996,12 @@
             <div class="scroll-progress-bar" id="progressBar"></div>
         </div>
         <nav class="navbar">
-            <a href="#" class="nav-logo">CHAEWON.</a>
+            <a href="#home" class="nav-logo">CHAEWON.</a>
             <button class="menu-toggle" id="menuToggle" aria-label="메뉴 열기">
                 <i class="fa-solid fa-bars"></i>
             </button>
             <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link">Home</a></li>
                 <li><a href="#about" class="nav-link">About me</a></li>
                 <li><a href="#stack" class="nav-link">Stack</a></li>
                 <li><a href="#goal" class="nav-link">Goal</a></li>
@@ -915,6 +1014,23 @@
             </ul>
         </nav>
     </div>
+
+    <!-- 0. 메인 홈(Hero) 섹션 -->
+    <section id="home" class="home-section">
+        <div class="container" style="max-width: 800px;">
+            <div class="home-badge">SSAFY 16기 12반 자기소개</div>
+            <h1 class="home-title">
+                안녕하세요!<br>
+                저는 <span class="highlight">이채원</span>입니다.
+            </h1>
+            <div class="home-profile-zone">
+                <div class="home-profile-circle">
+                    <img src="IMG_3372.png" alt="프로필" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=chaewon';">
+                </div>
+                <div class="home-subtitle">Frontend / Backend Developer</div>
+            </div>
+        </div>
+    </section>
 
     <!-- 1. 자기소개 섹션 -->
     <section id="about">
@@ -1206,14 +1322,15 @@
                     <a href="https://github.com" target="_blank" class="photo4-icon-btn" aria-label="깃허브"><i class="fa-brands fa-github"></i></a>
                 </div>
 
-                <!-- 버튼 텍스트 수정 -->
                 <button class="photo4-sendme-btn" id="openModalBtn"><i class="fa-regular fa-comment-dots"></i> 방명록을 남겨주세요!</button>
 
-                <!-- 실시간 방명록 목록 구역 추가 -->
+                <!-- 실시간 방명록 목록 구역 -->
                 <div class="guestbook-container" style="max-width: 600px; margin: 3.5rem auto 0 auto; text-align: left;">
-                    <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--primary); font-weight: 800; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">📜 방명록 목록</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+                        <h3 style="font-size: 1.2rem; color: var(--primary); font-weight: 800;">📜 방명록 목록</h3>
+                        <button onclick="if(confirm('정말 모든 방명록을 삭제하시겠습니까?')){localStorage.removeItem('guestbook'); location.reload();}" style="background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">초기화</button>
+                    </div>
                     <div id="guestbookList" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- 방명록 카드가 자바스크립트로 이곳에 실시간 빌드됩니다. -->
                     </div>
                 </div>
             </div>
@@ -1347,7 +1464,6 @@
         const messageForm = document.getElementById('messageForm');
         const guestbookList = document.getElementById('guestbookList');
 
-        // 페이지 로드 시 기존에 영구 저장된 방명록 데이터 로드
         window.addEventListener('DOMContentLoaded', loadMessages);
 
         openModalBtn.addEventListener('click', () => modalOverlay.classList.add('active'));
@@ -1357,7 +1473,6 @@
             if(e.target === modalOverlay) modalOverlay.classList.remove('active');
         });
 
-        // 사용자가 내용을 입력하고 등록을 제출했을 때의 액션
         messageForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
@@ -1367,20 +1482,16 @@
 
             const newMessage = { name, content, date: dateStr };
 
-            // 1. 화면 인터페이스에 실시간 노출
             renderMessageCard(newMessage);
 
-            // 2. 브라우저 저장소(localStorage)에 배열 형태로 안전하게 밀어넣기
             let savedMessages = JSON.parse(localStorage.getItem('guestbook')) || [];
             savedMessages.push(newMessage);
             localStorage.setItem('guestbook', JSON.stringify(savedMessages));
 
-            // 입력 상자 세팅값 초기화 및 활성화된 창 닫기
             messageForm.reset();
             modalOverlay.classList.remove('active');
         });
 
-        // 방명록 뼈대를 가공해서 화면 리스트 구조에 넣어주는 함수
         function renderMessageCard(msg) {
             const card = document.createElement('div');
             card.classList.add('guestbook-card');
@@ -1391,17 +1502,14 @@
                 </div>
                 <div class="guestbook-text">${escapeHtml(msg.content)}</div>
             `;
-            // 새 글이 기존 글 위(최상단)에 계속 역순 정렬되도록 세팅
             guestbookList.prepend(card); 
         }
 
-        // 로컬스토리지에 들어있는 목록 배열 루프 돌며 데이터 렌더링
         function loadMessages() {
             const savedMessages = JSON.parse(localStorage.getItem('guestbook')) || [];
             savedMessages.forEach(msg => renderMessageCard(msg));
         }
 
-        // XSS 텍스트 주입 공격 차단을 위한 보안 이스케이프 유틸 함수
         function escapeHtml(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
