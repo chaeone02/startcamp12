@@ -18,8 +18,8 @@
             --card-bg: #0f1626;       /* 대비를 위한 딥블루 네이비 카드 배경 */
             --text-main: #ffffff;
             --text-sub: #8fa0ba;       /* 블루 톤이 도는 실버 그레이 */
-            --f1-red: #FF1801;         /* F1 시그니처 레드 */
-            --f1-neon: #00F2FE;        /* 하이테크 레이싱 네온 블루 */
+            --f1-red: #FF1801;         /* F1 및 페라리 시그니처 레이싱 레드 */
+            --ferrari-gold: #FFD200;   /* 페라리 스쿠데리아 엠블럼 골드 옐로우 */
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -77,7 +77,7 @@
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 8px;
+            gap: 4px;
         }
 
         .nav-link {
@@ -99,7 +99,7 @@
 
         /* 3. 섹션 공통 스타일 */
         section {
-            padding: 100px 0 80px 0;
+            padding: 110px 0 90px 0;
             border-bottom: 1px solid #162238;
         }
 
@@ -109,8 +109,8 @@
         }
 
         .section-title {
-            font-size: 2.2rem;
-            font-weight: 800;
+            font-size: 2.4rem;
+            font-weight: 900;
             margin-bottom: 14px;
             letter-spacing: -0.5px;
         }
@@ -141,7 +141,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: radial-gradient(circle at center, #13223f 0%, #070b12 100%);
+            background: radial-gradient(circle at center, #182643 0%, #070b12 100%);
             position: relative;
             padding-top: 100px;
         }
@@ -171,8 +171,8 @@
             height: 130px;
             margin: 0 auto 35px auto;
             border-radius: 50%;
-            background: linear-gradient(45deg, var(--f1-red), var(--f1-neon));
-            box-shadow: 0 0 35px rgba(255, 24, 1, 0.3);
+            background: linear-gradient(45deg, var(--f1-red), #b00f00);
+            box-shadow: 0 0 35px rgba(255, 24, 1, 0.4);
             animation: pulse 3s infinite alternate ease-in-out;
         }
 
@@ -191,31 +191,201 @@
             word-break: keep-all;
         }
 
-        /* 6. 규칙 섹션 (RULES) */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
+        /* 6. 규칙 섹션 (RULES - 팀 라디오 메세지 가로 3열 커스텀) */
+        .radio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
         }
 
-        .timeline-item {
-            padding: 24px 30px;
-            position: relative;
+        .radio-box {
             background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 24px;
-            border-left: 4px solid var(--f1-red);
+            border: 1px solid #1a263d;
+            border-radius: 14px;
+            padding: 30px 24px;
+            position: relative;
             text-align: left;
+            transition: var(--transition);
+            overflow: hidden;
         }
 
-        .timeline-step {
+        /* 팀 라디오 특유의 무전 주파수 데코레이션 효과 */
+        .radio-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: #203354;
+            transition: var(--transition);
+        }
+
+        .radio-wave-ui {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-bottom: 20px;
+            opacity: 0.4;
+            transition: var(--transition);
+        }
+
+        .radio-wave-ui span {
+            display: inline-block;
+            width: 2px;
+            background-color: var(--text-sub);
+            border-radius: 1px;
+        }
+        .radio-wave-ui span:nth-child(1) { height: 12px; }
+        .radio-wave-ui span:nth-child(2) { height: 22px; }
+        .radio-wave-ui span:nth-child(3) { height: 16px; }
+        .radio-wave-ui span:nth-child(4) { height: 28px; }
+        .radio-wave-ui span:nth-child(5) { height: 10px; }
+
+        .radio-tag {
+            font-size: 0.75rem;
             font-weight: 800;
-            color: var(--f1-neon);
-            margin-bottom: 5px;
-            font-size: 0.85rem;
+            color: var(--f1-red); /* 청록색에서 F1 레드로 변경 */
+            letter-spacing: 1px;
+            margin-left: auto;
+            border: 1px solid rgba(255, 24, 1, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
         }
 
-        /* 7. 코어 어트랙트 섹션 (CORE ATTRACT - 가로 3열 배치 고정) */
+        .radio-box h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .radio-box p {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* RULES 마우스 오버 테두리 반짝이 및 레드 글로우 인터랙션 */
+        .radio-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--f1-red);
+            box-shadow: 0 0 20px rgba(255, 24, 1, 0.25);
+        }
+
+        .radio-box:hover::before {
+            background: var(--f1-red);
+        }
+
+        .radio-box:hover .radio-wave-ui {
+            opacity: 1;
+        }
+        .radio-box:hover .radio-wave-ui span {
+            background-color: var(--f1-red);
+        }
+
+        /* 7. 최애 팀 세션 (TEAM - 스쿠데리아 페라리 아카이브) */
+        .team-section {
+            background-color: #0b111c;
+        }
+
+        .ferrari-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .ferrari-main-card {
+            background: linear-gradient(135deg, #1b1212 0%, var(--card-bg) 100%);
+            border: 1px solid #2d1818; /* 페라리 감성 딥레드 보더 */
+            border-left: 5px solid var(--f1-red);
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .ferrari-badge {
+            display: inline-block;
+            background: var(--ferrari-gold);
+            color: #000000;
+            font-weight: 900;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+            letter-spacing: 0.5px;
+        }
+
+        .ferrari-grid-sub {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .ferrari-sub-card {
+            background: var(--card-bg);
+            border: 1px solid #1a263d;
+            border-radius: 14px;
+            padding: 26px;
+            text-align: left;
+            transition: var(--transition);
+        }
+
+        .ferrari-sub-card:hover {
+            border-color: rgba(255, 24, 1, 0.5);
+            transform: scale(1.01);
+        }
+
+        .sub-card-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-card-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 12px;
+            background: var(--f1-red);
+        }
+
+        .driver-names {
+            font-size: 1.15rem;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+        .driver-names span {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            font-weight: 400;
+            margin-left: 6px;
+        }
+
+        .stat-list {
+            list-style: none;
+            font-size: 0.95rem;
+        }
+        .stat-list li {
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .stat-list li em {
+            font-style: normal;
+            color: var(--f1-red);
+            font-weight: 700;
+        }
+
+        /* 8. 코어 어트랙트 섹션 (CORE ATTRACT - 피트스톱 박스 그리드 레이아웃 구현) */
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -225,16 +395,32 @@
 
         .core-card {
             background-color: var(--card-bg);
-            padding: 35px 25px;
-            border-radius: 16px;
+            padding: 40px 28px;
+            border-radius: 4px; /* 노면 박스 느낌을 위해 라운딩 최소화 */
             border: 1px solid #1a263d;
+            /* 피트인 시 정지선 마킹을 연상시키는 굵은 대각 바인딩 포인트 디자인 */
+            border-bottom: 4px solid #203354; 
             transition: var(--transition);
             cursor: pointer;
+            position: relative;
+        }
+
+        /* 피트스톱 진입 슬롯 넘버 데코 */
+        .core-card::after {
+            content: 'PIT STOP ZONE';
+            position: absolute;
+            bottom: 10px; right: 15px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            opacity: 0.15;
+            letter-spacing: 0.5px;
         }
 
         .core-card:hover {
             transform: translateY(-8px);
             border-color: var(--f1-red);
+            border-bottom: 4px solid var(--f1-red);
             box-shadow: 0 12px 25px rgba(0,0,0,0.6);
         }
 
@@ -247,19 +433,22 @@
             font-size: 1.35rem;
             margin-bottom: 12px;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        /* 8. 갤러리 섹션 (GALLERY - 2개씩 두 줄, 총 4개 배치 적용) */
+        /* 9. 갤러리 섹션 (GALLERY - 2개씩 두 줄 적용) */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 가로 2개 고정 배치 */
+            grid-template-columns: repeat(2, 1fr);
             gap: 24px;
             max-width: 900px;
             margin: 0 auto;
         }
 
         .gallery-item {
-            aspect-ratio: 16/9; /* 서킷 와이드 뷰에 최적화된 비율 */
+            aspect-ratio: 16/9;
             background-color: var(--card-bg);
             border: 1px solid #1a263d;
             border-radius: 12px;
@@ -277,11 +466,11 @@
         .gallery-item:hover {
             transform: scale(1.02);
             color: var(--text-main);
-            border-color: var(--f1-neon);
+            border-color: var(--f1-red);
             box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
 
-        /* 9. 버튼 및 인터랙션 (모달) */
+        /* 10. 버튼 및 인터랙션 (모달) */
         .cta-btn {
             display: inline-block;
             background: #ffffff;
@@ -346,7 +535,7 @@
             cursor: pointer;
         }
 
-        /* 10. 푸터 */
+        /* 11. 푸터 */
         .footer {
             background: #04060a;
             padding: 40px 0;
@@ -355,20 +544,23 @@
             font-size: 0.85rem;
         }
 
-        /* 11. 반응형 분기점 */
-        @media (max-width: 900px) {
-            .grid-3 {
+        /* 12. 반응형 분기점 */
+        @media (max-width: 960px) {
+            .radio-grid, .grid-3, .ferrari-grid {
+                grid-template-columns: 1fr;
+            }
+            .ferrari-grid-sub {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 600px) {
-            .grid-3, .gallery-grid {
+            .ferrari-grid-sub, .gallery-grid {
                 grid-template-columns: 1fr;
             }
             .hero-title { font-size: 2.3rem; }
-            .nav-menu { gap: 4px; }
-            .nav-link { font-size: 0.75rem; padding: 4px 6px; }
+            .nav-menu { gap: 2px; }
+            .nav-link { font-size: 0.7rem; padding: 4px 5px; }
         }
     </style>
 </head>
@@ -379,9 +571,10 @@
         <div class="nav-container">
             <a href="#" class="nav-logo" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;">F1 <span>ARCHIVE</span></a>
             <ul class="nav-menu">
-                <li><a href="#intro" class="nav-link">INTRODUCE</a></li>
+                <li><a href="#intro" class="nav-link">INTRO</a></li>
                 <li><a href="#rules" class="nav-link">RULES</a></li>
-                <li><a href="#core" class="nav-link">CORE ATTRACT</a></li>
+                <li><a href="#team" class="nav-link">TEAM</a></li>
+                <li><a href="#core" class="nav-link">ATTRACT</a></li>
                 <li><a href="#gallery" class="nav-link">GALLERY</a></li>
             </ul>
         </div>
@@ -410,34 +603,102 @@
         </div>
     </section>
 
-    <!-- 3. 규칙 페이지 (RULES) -->
+    <!-- 3. 규칙 페이지 (RULES - 팀 라디오 컨셉 변경 및 가로 배치 고도화) -->
     <section id="rules">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">RULES</h2>
-                <p class="section-subtitle">알고 보면 백 배 더 흥미진진한 F1의 핵심 규칙</p>
+                <h2 class="section-title">TRACK RULES</h2>
+                <p class="section-subtitle">무전 너머 들려오는 F1 본선의 필수 핵심 규칙</p>
             </div>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-step">RULE 01. 타이어 전략 (Tire Compounds)</div>
-                    <h3 style="margin-bottom: 8px;">다른 성향의 타이어 의무 사용</h3>
-                    <p style="color: var(--text-sub);">경기가 열리는 동안 드라이버는 컴파운드(단단함과 그립력)가 서로 다른 최소 2종류 이상의 드라이 타이어를 반드시 사용해야 합니다. 소프트 타이어의 폭발적인 스피드와 하드 타이어의 끈질긴 내구성 중 무엇을 먼저 선택하느냐가 승패를 가릅니다.</p>
+            <div class="radio-grid">
+                <!-- 타이어 전략 -->
+                <div class="radio-box">
+                    <div class="radio-wave-ui">
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <div class="radio-tag">01 RADIO OVER</div>
+                    </div>
+                    <h3>타이어 컴파운드 의무</h3>
+                    <p>경기가 열리는 동안 드라이버는 성향(단단함과 그립력)이 서로 다른 최소 2종류 이상의 드라이 타이어를 반드시 교체 사용해야 합니다. 소프트 타이어의 폭발적인 스피드와 하드 타이어의 오랜 내구성의 안배가 포인트입니다.</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-step">피트스톱 전략 (Pit Stop Mechanism)</div>
-                    <h3>2초대 예술, 언더컷과 오버컷</h3>
-                    <p style="color: var(--text-sub);">타이어 교체를 위해 피트(Pit)로 들어오는 순간, 약 20명의 크루가 일사불란하게 움직여 단 2초 만에 작업을 끝냅니다. 라이벌보다 먼저 피트인하여 새 타이어로 앞서나가는 '언더컷', 반대로 트랙에 오래 버티며 격차를 벌리는 '오버컷' 등 치열한 두뇌 싸움이 일어나는 구간입니다.</p>
+
+                <!-- 피트스톱 전략 -->
+                <div class="radio-box">
+                    <div class="radio-wave-ui">
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <div class="radio-tag">02 RADIO OVER</div>
+                    </div>
+                    <h3>2초대의 미학, 피트스톱</h3>
+                    <p>타이어 교체를 위해 피트로 들어오는 짧은 순간, 약 20명의 크루가 일사불란하게 움직여 단 2초 만에 작업을 완료합니다. 타이어 타이밍을 조절해 순위를 뺏고 뺏기는 언더컷, 오버컷 두뇌 싸움의 정점입니다.</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-step">오버테이크 모드 전략 (Manual Override Mode)</div>
-                    <h3>2026 뉴 규정, 배터리를 쥐어짜는 추월 모드 (MOM)</h3>
-                    <p style="color: var(--text-sub);">기존의 공기역학적 DRS 체제를 넘어, 2026년부터는 전기 에너지를 순간적으로 폭발시키는 '수동 오버테이크 모드(MOM)'가 도입되었습니다. 앞 차와의 간격이 매치되었을 때 드라이버가 직접 배터리 출력을 최대치로 끌어올려 직선 주로에서 짜릿한 추월을 시도하는 핵심 공격 시스템입니다.</p>
+
+                <!-- 오버테이크 모드 전략 -->
+                <div class="radio-box">
+                    <div class="radio-wave-ui">
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <div class="radio-tag">03 RADIO OVER</div>
+                    </div>
+                    <h3>2026 오버테이크 모드</h3>
+                    <p>기존의 기계식 가변 플랩(DRS) 시스템을 대체하여 도입된 새로운 규정입니다. 배터리에 비축된 하이브리드 전기에너지를 드라이버가 직선 구간에서 수동으로 순간 방출(MOM)하여 극한의 추월 가속을 쥐어짜냅니다.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 4. 코어어트랙트 페이지 (CORE ATTRACT) -->
+    <!-- 4. 마이 페이버릿 팀 페이지 (TEAM - 신설 섹션) -->
+    <section id="team" class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">MY FAVORITE TEAM</h2>
+                <p class="section-subtitle">모터스포츠 그 자체이자 살아있는 신화, 스쿠데리아 페라리</p>
+            </div>
+            
+            <div class="ferrari-grid">
+                <!-- 왼쪽 대형 카드 : 팀 소개 -->
+                <div class="ferrari-main-card">
+                    <div class="ferrari-badge">SCUDERIA FERRARI</div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 15px; font-weight: 800;">스쿠데리아 페라리</h3>
+                    <p style="color: var(--text-sub); font-size: 1rem; line-height: 1.7;">
+                        1950년 F1 출범 이래 단 한 시즌도 빠짐없이 참가해 온 유일무이한 역사적 팀입니다. 창립자 엔초 페라리의 레이싱 철학을 계승하며, 붉은색 머신(로소 코르사)과 도약하는 말 문양은 전 세계 수많은 '티포시(Tifosi)' 팬덤을 광열하게 만드는 F1의 심장과 같습니다.
+                    </p>
+                </div>
+
+                <!-- 오른쪽 서브 그리드 카드 리스트 -->
+                <div class="ferrari-grid-sub">
+                    <!-- 드라이버 라인업 -->
+                    <div class="ferrari-sub-card">
+                        <div class="sub-card-title">Current Line-up</div>
+                        <div class="driver-names" style="margin-bottom: 10px;">🏎️ 샤를 르클레르 <span>Monaco</span></div>
+                        <div class="driver-names">🏎️ 루이스 해밀턴 <span>United Kingdom</span></div>
+                    </div>
+
+                    <!-- 팀의 역대 성적 -->
+                    <div class="ferrari-sub-card">
+                        <div class="sub-card-title">Historical Records</div>
+                        <ul class="stat-list">
+                            <li>컨스트럭터 챔피언 <em>16회 (역대 1위)</em></li>
+                            <li>드라이버 챔피언 <em>15회</em></li>
+                            <li>그랑프리 우승 <em>250+회</em></li>
+                        </ul>
+                    </div>
+
+                    <!-- 최근 모멘트 및 우승 -->
+                    <div class="ferrari-sub-card">
+                        <div class="sub-card-title">Recent Victory</div>
+                        <p style="font-size: 1.1rem; font-weight: 700; margin-bottom: 5px; color: var(--f1-red);">2026 영국 그랑프리</p>
+                        <p style="color: var(--text-sub); font-size: 0.85rem;">가장 최근 경기에서 샤를 르클레르가 24년도 이후 첫 승리를 거두며 최상위권 챔피언십 타이틀 경쟁 복귀!</p>
+                    </div>
+
+                    <!-- 정체성과 팬덤 (추가 구성 요소) -->
+                    <div class="ferrari-sub-card">
+                        <div class="sub-card-title">The Tifosi Spirit</div>
+                        <p style="font-size: 0.95rem; color: var(--text-sub);">페라리는 단순한 스포츠 구단이 아닌 이탈리아의 자존심입니다. 전 세계 서킷을 붉게 물들이는 거대한 장막과 뜨거운 응원 문화는 F1 최고의 시각적 장관입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 코어어트랙트 페이지 (CORE ATTRACT - 피트스톱 노면 그래픽 가미) -->
     <section id="core">
         <div class="container">
             <div class="section-header">
@@ -445,28 +706,26 @@
                 <p class="section-subtitle">전 세계 수억 명의 팬들을 매료시킨 F1만의 3가지 핵심 매력</p>
             </div>
             <div class="grid-3">
-                <div class="core-card" onclick="openModal('🏎️ 첨단 공학 기술과 자본의 결정체', '머신 한 대에 수천억 원의 가치가 투입되며, 우주선 수준의 에어로다이내믹스(공기역학) 기술이 총동원됩니다. 지구상에서 가장 정밀하고 빠른 기계공학의 진수를 눈앞에서 목격하는 경이로움이 있습니다.')">
+                <div class="core-card" onclick="openModal('🏎️ 하이테크 기계 공학', '머신 한 대에 수천억 원의 자본과 가치가 투입되며, 우주선 수준의 에어로다이내믹스(공기역학) 기술이 총동원됩니다. 지구상에서 가장 정밀하고 빠른 기계공학의 진수를 눈앞에서 목격하는 경이로움이 있습니다.')">
                     <div class="card-icon">🏎️</div>
-                    <h3 class="card-h3">하이테크 공학</h3>
+                    <h3 class="card-h3">하이테크 공학 <span>➔</span></h3>
                     <p style="color: var(--text-sub); font-size: 0.9rem;">인류 자동차 기술의 최전선과 천문학적 자본이 만들어내는 하이엔드 테크놀로지.</p>
                 </div>
                 <div class="core-card" onclick="openModal('🌍 글로벌 스케일 & 시티 서킷', '2~3주마다 전 세계 곳곳으로 나라를 바꿔가며 개최되는 그랑프리는 도시 전체를 거대한 축제의 장으로 만듭니다. 모나코의 해안가, 라스베이거스의 화려한 야경, 싱가포르의 도심 빌딩 숲을 그대로 서킷으로 사용하는 시가지 서킷의 아름다운 비주얼과, 온몸을 울리는 머신의 엔진음이 주는 압도적인 현장감은 F1에서만 느낄 수 있는 독보적인 매력입니다.')">
-                    <div class="core-card-inside">
-                        <div class="card-icon">🧠</div>
-                        <h3 class="card-h3">🌍 글로벌 스케일 & 시티 서킷</h3>
-                        <p style="color: var(--text-sub); font-size: 0.9rem;">2~3주마다 전 세계를 순회하는 메가 스포츠의 압도적인 현장감.</p>
-                    </div>
+                    <div class="card-icon">🌍</div>
+                    <h3 class="card-h3">글로벌 스케일 <span>➔</span></h3>
+                    <p style="color: var(--text-sub); font-size: 0.9rem;">2~3주마다 전 세계를 순회하는 메가 스포츠의 압도적인 현장감과 시티 서킷의 절경.</p>
                 </div>
                 <div class="core-card" onclick="openModal('🏁 22인의 서사 & 끈끈한 관계성', '전 세계에서 단 11개 팀, 22명의 드라이버에게만 운전석(시트)이 허락되는 지극히 좁고 특별한 세계입니다. 인원이 적은 만큼 팬들은 선수 한 명 한 명의 데뷔 스토리부터 성장 과정을 깊게 지켜보며 정을 주게 되고, 결국 모든 팀을 응원하게 되는 묘한 끈끈함이 생깁니다. 서킷 위에서는 목숨을 걸고 싸우지만, 서킷 밖에서는 오랜 시간 함께 자라온 드라이버들 간의 유쾌하고 끈끈한 관계성을 지켜보는 것도 F1을 즐기는 최고의 재미입니다.')">
-                    <div class="card-icon">🌍</div>
-                    <h3 class="card-h3">🏁 22인의 서사 & 끈끈한 관계성</h3>
-                    <p style="color: var(--text-sub); font-size: 0.9rem;"> 오직 22명에게만 허락된 시트, 드라이버 개개인의 스토리가 주는 깊은 몰입감.</p>
+                    <div class="card-icon">🏁</div>
+                    <h3 class="card-h3">22인의 관계성 <span>➔</span></h3>
+                    <p style="color: var(--text-sub); font-size: 0.9rem;">오직 22명에게만 허락된 시트, 드라이버 개개인의 끈끈한 유대와 서사가 주는 깊은 몰입감.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 5. 갤러리 페이지 (GALLERY - 2x2 총 4개 배치 고정) -->
+    <!-- 6. 갤러리 페이지 (GALLERY - 2x2 총 4개 배치 고정) -->
     <section id="gallery" style="background-color: #0b111c;">
         <div class="container">
             <div class="section-header">
