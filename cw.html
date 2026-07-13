@@ -62,10 +62,10 @@
             pointer-events: none;
         }
 
-        /* 1. 움직이는 하트 커서 애니메이션 스타일 (크기 1.3배 상향 조정) */
+        /* 움직이는 하트 커서 애니메이션 스타일 */
         .heart-pop {
             position: fixed;
-            font-size: calc(1rem * 1.3); /* [수정] 1.3배 크기로 확대 */
+            font-size: calc(1rem * 1.3); 
             color: var(--primary);
             pointer-events: none;
             z-index: 9999;
@@ -171,7 +171,7 @@
             cursor: pointer;
         }
 
-        /* 공통 섹션 구조 및 목차 디자인 복구 (사진2 스타일) */
+        /* 공통 섹션 구조 및 목차 디자인 */
         section {
             padding: 9rem 2rem 5rem 2rem;
             min-height: 100vh;
@@ -186,7 +186,6 @@
             margin: 0 auto;
         }
 
-        /* 사진2 기반 목차 헤더 템플릿 */
         .section-header {
             margin-bottom: 3.5rem;
             text-align: left;
@@ -289,7 +288,6 @@
             font-size: 1rem;
         }
 
-        /* [수정 1] F1 관람용 인라인 이동 버튼 스타일 */
         .f1-link-btn {
             display: inline-flex;
             align-items: center;
@@ -312,7 +310,7 @@
             color: #ffffff;
         }
 
-        /* === 2. 레벨 및 스택 섹션 (GitHub 리드미 테마 개편) === */
+        /* === 2. 레벨 및 스택 섹션 (원형 차트 고정 + 스크롤 쭈욱 애니메이션 + 툴팁) === */
         .stack-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -336,7 +334,7 @@
             font-weight: 700;
         }
 
-        /* [수정 2] GitHub Readme 컴포넌트 화 */
+        /* [개선] 툴팁 가이드용 래퍼 */
         .github-readme-row {
             display: flex;
             align-items: center;
@@ -346,23 +344,33 @@
             border-radius: 12px;
             gap: 1.1rem;
             margin-bottom: 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .github-readme-row:last-child {
-            margin-bottom: 0;
+        .github-readme-row:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
 
-        /* 좌측 로딩 원형 차트 */
+        /* [수정 1] 원형 도넛 차트 (고정 스타일) */
         .readme-pie {
-            width: 28px;
-            height: 28px;
-            transform: rotate(-90deg);
+            width: 32px;
+            height: 32px;
             flex-shrink: 0;
+        }
+
+        .readme-pie svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
         }
 
         .readme-pie circle {
             fill: none;
-            stroke-width: 32;
+            stroke-width: 6;
         }
 
         .readme-pie .bg-circle {
@@ -371,13 +379,8 @@
 
         .readme-pie .fill-circle {
             stroke: var(--primary);
-            stroke-dasharray: 100 100;
-            stroke-dashoffset: 100;
-            animation: fillCircleAnim 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        @keyframes fillCircleAnim {
-            to { stroke-dashoffset: var(--dash-offset); }
+            stroke-dasharray: 100;
+            stroke-dashoffset: var(--donut-offset); /* 고정 값 할당 */
         }
 
         .readme-body {
@@ -399,19 +402,20 @@
             gap: 0.8rem;
         }
 
-        /* 기존보다 콤팩트하게 줄인 고정형 막대바 */
         .readme-bar-bg {
-            width: 100px;
+            width: 110px;
             height: 8px;
             background: var(--border);
             border-radius: 10px;
             overflow: hidden;
         }
 
+        /* [수정 1] 스크롤 시 쭈욱 채워지는 실시간 바 애니메이션 기본 세팅 */
         .readme-bar-fill {
             height: 100%;
             background: var(--primary);
-            width: var(--bar-w); /* 정적 고정 가로 폭 */
+            width: 0%; /* 기본값 0%에서 JS로 타겟 너비까지 실시간 확장 */
+            transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .readme-percent-text {
@@ -422,7 +426,45 @@
             text-align: right;
         }
 
-        /* [수정 3] 사진1 매칭 알고리즘 컴포넌트 스타일 */
+        /* [수정 2] 한 줄 설명 팝업 툴팁 디자인 */
+        .stack-tooltip {
+            position: absolute;
+            bottom: 115%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: #2d2d2d;
+            color: #ffffff;
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            width: 260px;
+            text-align: center;
+            word-break: keep-all;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 10;
+        }
+
+        .stack-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: #2d2d2d transparent transparent transparent;
+        }
+
+        .github-readme-row:hover .stack-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 알고리즘 레벨 컴포넌트 */
         .algo-level-container {
             width: 100%;
             margin-top: 1rem;
@@ -469,7 +511,7 @@
             font-weight: 700;
         }
 
-        /* === 3. 목표 (Goal) 섹션 (사진3 카드 2분할 스타일 적용) === */
+        /* === 3. 목표 (Goal) 섹션 === */
         .goal-grid-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -541,7 +583,7 @@
             word-break: keep-all;
         }
 
-        /* === 4. 컨택트 섹션 (사진4 스타일 완벽 구현) === */
+        /* === 4. 컨택트 섹션 === */
         .photo4-container {
             text-align: center;
             max-width: 750px;
@@ -766,6 +808,10 @@
             .photo4-text {
                 font-size: 1.25rem;
             }
+            
+            .stack-tooltip {
+                width: 220px;
+            }
         }
     </style>
 </head>
@@ -849,7 +895,7 @@
                             <div>
                                 <div class="info-label">취미</div>
                                 <div class="info-value">
-                                    음악 감상, <!-- [수정 1] F1 관람 항목 버튼으로 변경 구현 -->
+                                    음악 감상, 
                                     <a href="https://ai-onboarding-f1.netlify.app/f1.html" target="_blank" class="f1-link-btn">🏁 F1 관람</a>
                                 </div>
                             </div>
@@ -869,73 +915,77 @@
             </div>
             
             <div class="stack-layout">
-                <!-- [수정 2] GitHub Readme 스타일 원형 차트 연동 및 수치 변경 (70, 80, 60, 60) -->
+                <!-- Backend Stack -->
                 <div class="stack-card">
                     <h3><i class="fa-solid fa-server" style="color:var(--primary)"></i> Backend Stack</h3>
                     
-                    <!-- Java: 70% -->
+                    <!-- Java: 70% (Donut Offset = 100 - 70 = 30) -->
                     <div class="github-readme-row">
+                        <div class="stack-tooltip">Java 기반의 객체 지향 설계를 바탕으로 대규모 Spring 프로젝트 개발 경험 보유</div>
                         <div class="readme-pie">
-                            <svg viewBox="0 0 32 32">
-                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
-                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 30;"/>
+                            <svg viewBox="0 0 36 36">
+                                <circle class="bg-circle" cx="18" cy="18" r="16"/>
+                                <circle class="fill-circle" cx="18" cy="18" r="16" style="--donut-offset: 30;"/>
                             </svg>
                         </div>
                         <div class="readme-body">
                             <div class="readme-name">Java</div>
                             <div class="readme-bar-wrapper">
-                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 70%;"></div></div>
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" data-target="70%"></div></div>
                                 <div class="readme-percent-text">70%</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Spring: 60% -->
+                    <!-- Spring: 60% (Donut Offset = 100 - 60 = 40) -->
                     <div class="github-readme-row">
+                        <div class="stack-tooltip">전반적인 Spring 생태계 및 MVC 아키텍처, 빈 생명주기에 대한 깊은 이해</div>
                         <div class="readme-pie">
-                            <svg viewBox="0 0 32 32">
-                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
-                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 40;"/>
+                            <svg viewBox="0 0 36 36">
+                                <circle class="bg-circle" cx="18" cy="18" r="16"/>
+                                <circle class="fill-circle" cx="18" cy="18" r="16" style="--donut-offset: 40;"/>
                             </svg>
                         </div>
                         <div class="readme-body">
                             <div class="readme-name">Spring</div>
                             <div class="readme-bar-wrapper">
-                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 60%;"></div></div>
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" data-target="60%"></div></div>
                                 <div class="readme-percent-text">60%</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- MySQL: 60% -->
+                    <!-- MySQL: 60% (Donut Offset = 100 - 60 = 40) -->
                     <div class="github-readme-row">
+                        <div class="stack-tooltip">관계형 데이터베이스(RDB) 설계 및 프로젝트 내 데이터 정규화·쿼리 최적화 경험 수행</div>
                         <div class="readme-pie">
-                            <svg viewBox="0 0 32 32">
-                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
-                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 40;"/>
+                            <svg viewBox="0 0 36 36">
+                                <circle class="bg-circle" cx="18" cy="18" r="16"/>
+                                <circle class="fill-circle" cx="18" cy="18" r="16" style="--donut-offset: 40;"/>
                             </svg>
                         </div>
                         <div class="readme-body">
                             <div class="readme-name">MySQL</div>
                             <div class="readme-bar-wrapper">
-                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 60%;"></div></div>
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" data-target="60%"></div></div>
                                 <div class="readme-percent-text">60%</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Python: 80% -->
+                    <!-- Python: 80% (Donut Offset = 100 - 80 = 20) -->
                     <div class="github-readme-row">
+                        <div class="stack-tooltip">코딩 테스트 및 알고리즘 풀이 주력 언어이자 2회의 데이터 분석 프로젝트 완수</div>
                         <div class="readme-pie">
-                            <svg viewBox="0 0 32 32">
-                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
-                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 20;"/>
+                            <svg viewBox="0 0 36 36">
+                                <circle class="bg-circle" cx="18" cy="18" r="16"/>
+                                <circle class="fill-circle" cx="18" cy="18" r="16" style="--donut-offset: 20;"/>
                             </svg>
                         </div>
                         <div class="readme-body">
                             <div class="readme-name">Python</div>
                             <div class="readme-bar-wrapper">
-                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 80%;"></div></div>
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" data-target="80%"></div></div>
                                 <div class="readme-percent-text">80%</div>
                             </div>
                         </div>
@@ -943,52 +993,56 @@
 
                 </div>
                 
+                <!-- Tools & Others -->
                 <div class="stack-card">
                     <h3><i class="fa-solid fa-screwdriver-wrench" style="color:var(--accent)"></i> Tools & Others</h3>
                     
                     <div class="github-readme-row">
+                        <div class="stack-tooltip">Git 브랜치 전략 기반 협업 및 형상 관리 프로세스 능숙한 활용 가능</div>
                         <div class="readme-pie">
-                            <svg viewBox="0 0 32 32">
-                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
-                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 20;"/>
+                            <svg viewBox="0 0 36 36">
+                                <circle class="bg-circle" cx="18" cy="18" r="16"/>
+                                <circle class="fill-circle" cx="18" cy="18" r="16" style="--donut-offset: 20;"/>
                             </svg>
                         </div>
                         <div class="readme-body">
                             <div class="readme-name">Git / GitHub</div>
                             <div class="readme-bar-wrapper">
-                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 80%;"></div></div>
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" data-target="80%"></div></div>
                                 <div class="readme-percent-text">80%</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="github-readme-row">
+                        <div class="stack-tooltip">UI/UX 와이어프레임 설계 및 컴포넌트 단위 협업 프로토타이핑 가능</div>
                         <div class="readme-pie">
-                            <svg viewBox="0 0 32 32">
-                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
-                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 30;"/>
+                            <svg viewBox="0 0 36 36">
+                                <circle class="bg-circle" cx="18" cy="18" r="16"/>
+                                <circle class="fill-circle" cx="18" cy="18" r="16" style="--donut-offset: 30;"/>
                             </svg>
                         </div>
                         <div class="readme-body">
                             <div class="readme-name">Figma</div>
                             <div class="readme-bar-wrapper">
-                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 70%;"></div></div>
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" data-target="70%"></div></div>
                                 <div class="readme-percent-text">70%</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="github-readme-row">
+                        <div class="stack-tooltip">일정 관리, 기술 아카이빙, 프로젝트 스프린트 일정 체계적 문서화 분담</div>
                         <div class="readme-pie">
-                            <svg viewBox="0 0 32 32">
-                                <circle class="bg-circle" cx="16" cy="16" r="16"/>
-                                <circle class="fill-circle" cx="16" cy="16" r="16" style="--dash-offset: 10;"/>
+                            <svg viewBox="0 0 36 36">
+                                <circle class="bg-circle" cx="18" cy="18" r="16"/>
+                                <circle class="fill-circle" cx="18" cy="18" r="16" style="--donut-offset: 10;"/>
                             </svg>
                         </div>
                         <div class="readme-body">
                             <div class="readme-name">Notion</div>
                             <div class="readme-bar-wrapper">
-                                <div class="readme-bar-bg"><div class="readme-bar-fill" style="--bar-w: 90%;"></div></div>
+                                <div class="readme-bar-bg"><div class="readme-bar-fill" data-target="90%"></div></div>
                                 <div class="readme-percent-text">90%</div>
                             </div>
                         </div>
@@ -997,7 +1051,7 @@
                 </div>
             </div>
 
-            <!-- [수정 3] 사진 1과 매칭되는 알고리즘 레벨 레이아웃을 하단 영역에 배치 -->
+            <!-- 알고리즘 레벨 컴포넌트 -->
             <div class="algo-level-container">
                 <div class="algo-title-label">Algorithm Level</div>
                 <div class="algo-card-box">
@@ -1018,7 +1072,6 @@
             </div>
             
             <div class="goal-grid-layout">
-                <!-- 카드 A: 개발자로서의 목표 -->
                 <div class="goal-card">
                     <div class="goal-title-area">
                         <div class="goal-badge-icon">A</div>
@@ -1037,7 +1090,6 @@
                     </div>
                 </div>
 
-                <!-- 카드 B: 싸피를 통해 얻고 싶은 것 -->
                 <div class="goal-card">
                     <div class="goal-title-area">
                         <div class="goal-badge-icon">B</div>
@@ -1129,12 +1181,29 @@
             progressBar.style.width = scrolled + '%';
         });
 
-        // --- 3. [수정 5] 마우스 오버 및 정적 유휴 상태 하트 자동 분출 로직 ---
+        // --- 3. [수정 1] 스크롤 시 들어올 때마다 게이지 채워지는 Intersection Observer 로직 ---
+        const fillBars = document.querySelectorAll('.readme-bar-fill');
+        
+        const barObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 화면에 보이면 타겟 퍼센트로 게이지 쭈욱 채움
+                    const targetWidth = entry.target.getAttribute('data-target');
+                    entry.target.style.width = targetWidth;
+                } else {
+                    // 화면에서 벗어나면 다시 0%로 초기화 (다시 들어올 때 재생되도록 처리)
+                    entry.target.style.width = '0%';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fillBars.forEach(bar => barObserver.observe(bar));
+
+        // --- 4. 마우스 오버 및 정적 유휴 상태 하트 자동 분출 로직 ---
         let lastHeartTime = 0;
         let lastX = window.innerWidth / 2;
         let lastY = window.innerHeight / 2;
 
-        // 커서 이동 시 위치 트래킹 및 하트 흔적 분출
         window.addEventListener('mousemove', (e) => {
             lastX = e.clientX;
             lastY = e.clientY;
@@ -1146,17 +1215,14 @@
             }
         });
 
-        // 마우스가 완전히 정지해(가만히) 있어도 400ms 간격으로 계속 하트를 발사하는 인터벌 구성
         setInterval(() => {
             createHeart(lastX, lastY);
         }, 400);
 
-        // 클릭 시에도 하트 레이어가 터져 나오도록 연동
         window.addEventListener('click', (e) => {
             createHeart(e.clientX, e.clientY);
         });
 
-        // 하트 엘리먼트 생성 팩토리 함수
         function createHeart(x, y) {
             const heart = document.createElement('div');
             heart.classList.add('heart-pop');
@@ -1164,7 +1230,6 @@
             heart.style.left = x + 'px';
             heart.style.top = y + 'px';
             
-            // 미세한 랜덤 오프셋 스케일링을 더해 역동감 부여
             const randomScale = Math.random() * 0.6 + 0.5;
             heart.style.transform = `translate(-50%, -50%) scale(${randomScale})`;
             
@@ -1175,7 +1240,7 @@
             }, 800);
         }
 
-        // --- 4. 모바일 햄버거 메뉴 토글 제어 ---
+        // --- 5. 모바일 햄버거 메뉴 토글 제어 ---
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
         
@@ -1193,7 +1258,7 @@
             });
         });
 
-        // --- 5. send me! 모달 레이어 팝업 제어 ---
+        // --- 6. send me! 모달 레이어 팝업 제어 ---
         const modalOverlay = document.getElementById('modalOverlay');
         const openModalBtn = document.getElementById('openModalBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
@@ -1213,7 +1278,7 @@
             modalOverlay.classList.remove('active');
         });
 
-        // --- 6. 배경 미세 입자(파티클) 무한 애니메이션 ---
+        // --- 7. 배경 미세 입자(파티클) 무한 애니메이션 ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
