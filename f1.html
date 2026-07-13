@@ -312,7 +312,7 @@
             height: 140px;
             margin: 0 auto 35px auto;
             border-radius: 50%;
-            background: url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&q=80&w=200') center/cover;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9cBQD1BRsD-eG5rhNXt5HtHdZ9iDxklhCdqDLBtomsQ&s=10') center/cover;
             border: 4px solid var(--f1-red);
             box-shadow: 0 0 35px rgba(255, 24, 1, 0.4);
             animation: pulse 3s infinite alternate ease-in-out;
@@ -954,7 +954,7 @@
                     <div class="ferrari-sub-card">
                         <div class="sub-card-title">Recent Victory</div>
                         <p style="font-size: 1.1rem; font-weight: 700; margin-bottom: 5px; color: var(--f1-red);">2026 영국 그랑프리</p>
-                        <p style="color: var(--text-sub); font-size: 0.85rem;">가장 최근 경기에서 샤를 르클레르가 최상위권 챔피언십 타이틀 경쟁 복귀!</p>
+                        <p style="color: var(--text-sub); font-size: 0.85rem;">가장 최근 경기인 지난 주 경기에서 샤를 르클레르가 최상위권 챔피언십 타이틀 경쟁 복귀!</p>
                     </div>
 
                     <div class="ferrari-sub-card">
@@ -993,31 +993,62 @@
         </div>
     </section>
 
-    <!-- 6. 갤러리 페이지 (GALLERY) -->
-    <section id="gallery" style="background-color: #090e17;">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">GALLERY</h2>
-                <p class="section-subtitle">F1의 역동성과 스케일을 담은 4가지 시각적 순간들</p>
-            </div>
-            <div class="gallery-grid">
-                <div class="gallery-card" onclick="this.classList.toggle('flipped')">
-                    <div class="gallery-card-inner">
-                        <div class="gallery-face gallery-front">
-                            <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&q=80&w=600" alt="F1 머신">
-                            <div class="gallery-front-caption">RED BULL RACING HONDA</div>
-                        </div>
-                        <div class="gallery-back">
-                            <div class="radio-tag">SCENE 01</div>
-                            <h3>서킷 위의 붉은 황소</h3>
-                            <p>공기역학적 완성도를 보여주는 섀시와 아스팔트를 움켜쥐며 나아가는 코너링 머신의 다이내믹한 뷰.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- 갤러리 카드 반복 추가 가능 영역 -->
-            </div>
+<!-- 6. 갤러리 페이지 (GALLERY - 2x2 고정 레이아웃 및 원본 이미지 매핑) -->
+<section id="gallery" style="background-color: #0b111c; padding: 60px 0; color: #fff; font-family: sans-serif;">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        
+        <!-- 섹션 헤더 -->
+        <div class="section-header" style="text-align: center; margin-bottom: 40px;">
+            <h2 class="section-title" style="font-size: 2.5rem; letter-spacing: 2px; margin-bottom: 10px; color: #fff;">GALLERY</h2>
+            <p class="section-subtitle" style="color: #8a99ad; font-size: 1rem;">F1의 역동성과 스케일을 담은 4가지 시각적 순간들</p>
         </div>
-    </section>
+        
+        <!-- 2x2 고정 그리드 레이아웃 -->
+        <div class="gallery-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+            
+            <!-- 카드 01: 스타트 라인 -->
+            <div class="gallery-card" style="position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7CZHQw2-V0YRcGESYM3AFxJd5WBaMrUxxGND_qgizJw&s=10" alt="F1 Start Grid" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <div class="gallery-overlay" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 25px 20px;">
+                    <p style="margin: 0; color: #fff; font-size: 1.1rem; font-weight: bold; letter-spacing: -0.5px;">
+                        📷 01. Red Light Out!
+                    </p>
+                </div>
+            </div>
+
+            <!-- 카드 02: 피트 스톱 -->
+            <div class="gallery-card" style="position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJb4bZUj8h-xWDBonIWoyaRkq2i8KNGD0guCF_nlpT5A&s=10" alt="Red Bull Pit Stop" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <div class="gallery-overlay" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 25px 20px;">
+                    <p style="margin: 0; color: #fff; font-size: 1.1rem; font-weight: bold; letter-spacing: -0.5px;">
+                        📷 02. Pit Stop Shot
+                    </p>
+                </div>
+            </div>
+
+            <!-- 카드 03: 모나코 그랑프리 -->
+            <div class="gallery-card" style="position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/v1780392332/fom-website/2026/Miscellaneous/monaco-2025-start-hairpin-1.png" alt="Monaco Hairpin" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <div class="gallery-overlay" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 25px 20px;">
+                    <p style="margin: 0; color: #fff; font-size: 1.1rem; font-weight: bold; letter-spacing: -0.5px;">
+                        📷 03. Monaco City Circuit
+                    </p>
+                </div>
+            </div>
+
+            <!-- 카드 04: 포디움 세레머니 -->
+            <div class="gallery-card" style="position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                <img src="https://i.guim.co.uk/img/media/fb7c60e53120ffb545bd012248ab0911f07c049f/0_92_5749_3451/master/5749.jpg?width=620&dpr=1&s=none&crop=none" alt="Ferrari Podium Celebration" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <div class="gallery-overlay" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 25px 20px;">
+                    <p style="margin: 0; color: #fff; font-size: 1.1rem; font-weight: bold; letter-spacing: -0.5px;">
+                        📷 04. Win, Podium, Ceremony!
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
     <!-- F1 리스타일 고도화 모달 -->
     <div class="modal" id="infoModal">
