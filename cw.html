@@ -309,7 +309,7 @@
             color: #ffffff;
         }
 
-        /* [추가] F1 버튼 전용 말풍선 컨테이너 및 팝업 스타일 */
+        /* F1 버튼 전용 말풍선 컨테이너 및 팝업 스타일 */
         .f1-container {
             position: relative;
             display: inline-block;
@@ -392,7 +392,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
 
-        /* 원형 도넛 차트 (고정 스타일) */
+        /* 원형 도넛 차트 */
         .readme-pie {
             width: 32px;
             height: 32px;
@@ -694,6 +694,42 @@
         .photo4-sendme-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(217, 77, 114, 0.35);
+        }
+
+        /* 실시간 방명록 영역 스타일 */
+        .guestbook-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            position: relative;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .guestbook-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .guestbook-name {
+            color: var(--primary);
+        }
+
+        .guestbook-text {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            word-break: break-all;
+            white-space: pre-line;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* 모달 팝업 구조 */
@@ -1170,7 +1206,16 @@
                     <a href="https://github.com" target="_blank" class="photo4-icon-btn" aria-label="깃허브"><i class="fa-brands fa-github"></i></a>
                 </div>
 
-                <button class="photo4-sendme-btn" id="openModalBtn"><i class="fa-regular fa-envelope"></i> send me!</button>
+                <!-- 버튼 텍스트 수정 -->
+                <button class="photo4-sendme-btn" id="openModalBtn"><i class="fa-regular fa-comment-dots"></i> 방명록을 남겨주세요!</button>
+
+                <!-- 실시간 방명록 목록 구역 추가 -->
+                <div class="guestbook-container" style="max-width: 600px; margin: 3.5rem auto 0 auto; text-align: left;">
+                    <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--primary); font-weight: 800; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">📜 방명록 목록</h3>
+                    <div id="guestbookList" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- 방명록 카드가 자바스크립트로 이곳에 실시간 빌드됩니다. -->
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1295,11 +1340,15 @@
             });
         });
 
-        // --- 6. send me! 모달 레이어 팝업 제어 ---
+        // --- 6. send me! 모달 레이어 팝업 제어 및 로컬스토리지 방명록 로직 ---
         const modalOverlay = document.getElementById('modalOverlay');
         const openModalBtn = document.getElementById('openModalBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const messageForm = document.getElementById('messageForm');
+        const guestbookList = document.getElementById('guestbookList');
+
+        // 페이지 로드 시 기존에 영구 저장된 방명록 데이터 로드
+        window.addEventListener('DOMContentLoaded', loadMessages);
 
         openModalBtn.addEventListener('click', () => modalOverlay.classList.add('active'));
         closeModalBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
@@ -1308,12 +1357,54 @@
             if(e.target === modalOverlay) modalOverlay.classList.remove('active');
         });
 
+        // 사용자가 내용을 입력하고 등록을 제출했을 때의 액션
         messageForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('메시지가 이채원님에게 성공적으로 전송되었습니다!');
+            
+            const name = document.getElementById('senderName').value;
+            const content = document.getElementById('messageContent').value;
+            const dateStr = new Date().toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
+
+            const newMessage = { name, content, date: dateStr };
+
+            // 1. 화면 인터페이스에 실시간 노출
+            renderMessageCard(newMessage);
+
+            // 2. 브라우저 저장소(localStorage)에 배열 형태로 안전하게 밀어넣기
+            let savedMessages = JSON.parse(localStorage.getItem('guestbook')) || [];
+            savedMessages.push(newMessage);
+            localStorage.setItem('guestbook', JSON.stringify(savedMessages));
+
+            // 입력 상자 세팅값 초기화 및 활성화된 창 닫기
             messageForm.reset();
             modalOverlay.classList.remove('active');
         });
+
+        // 방명록 뼈대를 가공해서 화면 리스트 구조에 넣어주는 함수
+        function renderMessageCard(msg) {
+            const card = document.createElement('div');
+            card.classList.add('guestbook-card');
+            card.innerHTML = `
+                <div class="guestbook-meta">
+                    <span class="guestbook-name">👤 ${escapeHtml(msg.name)}</span>
+                    <span>${msg.date}</span>
+                </div>
+                <div class="guestbook-text">${escapeHtml(msg.content)}</div>
+            `;
+            // 새 글이 기존 글 위(최상단)에 계속 역순 정렬되도록 세팅
+            guestbookList.prepend(card); 
+        }
+
+        // 로컬스토리지에 들어있는 목록 배열 루프 돌며 데이터 렌더링
+        function loadMessages() {
+            const savedMessages = JSON.parse(localStorage.getItem('guestbook')) || [];
+            savedMessages.forEach(msg => renderMessageCard(msg));
+        }
+
+        // XSS 텍스트 주입 공격 차단을 위한 보안 이스케이프 유틸 함수
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
 
         // --- 7. 배경 미세 입자(파티클) 무한 애니메이션 ---
         const canvas = document.getElementById('particle-canvas');
